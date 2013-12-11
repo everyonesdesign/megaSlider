@@ -1,0 +1,23 @@
+{
+  "name": "megaSlider",
+  "version": "0.0.0",
+  "homepage": "https://github.com/everyonesdesign/megaSlider.git",
+  "description": "jQuery slider with creative effects",
+  "main": "Gruntfile.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/everyonesdesign/megaSlider.git"
+  },
+  "author": "Trambitskiy Yura",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/everyonesdesign/megaSlider/issues"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-uglify": "~0.2.4",
+    "grunt-contrib-watch": "~0.5.3",
+    "grunt-contrib-copy": "~0.4.1",
+    "grunt-release": "~0.5.1"
+  }
+}

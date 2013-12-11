@@ -1,4 +1,4 @@
 megaSlider
-==========
+============
 
-jQuery slider with creative effects
+Readme is coming soon, stay connected.
