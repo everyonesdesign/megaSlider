@@ -12,14 +12,15 @@ module.exports = function (grunt) {
         // Task configuration.
         watch: {
             dist: {
-                files: ['dist/megaSlider.js'],
+                files: ['dist/megaSlider.js', 'dist/megaSlider.css'],
                 tasks: ['uglify', 'copy']
             }
         },
         copy: {
             dist: {
                 files: [
-                    {src: ['dist/megaSlider.min.js'], dest: 'demo/js/megaSlider.min.js'}
+                    {src: ['dist/megaSlider.min.js'], dest: 'demo/js/megaSlider.min.js'},
+                    {src: ['dist/megaSlider.css'], dest: 'demo/css/megaSlider.css'}
                 ]
             }
         },
