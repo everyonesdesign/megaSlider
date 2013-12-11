@@ -1,3 +1,5 @@
+//TODO add $this.options to achieve slider object from outside
+//TODO add auto, effects, controls, previews,
 ;
 (function($) {
     $.fn.megaSlider = function(options) {
@@ -24,8 +26,7 @@
                 $images = $this.find("img"),
                 $slides = $images.wrap("<div class='megaSlider-slide'>"),
                 currentSlide,
-                nextSlide,
-                autoTimeout;
+                nextSlide;
 
             //slider initialization
             initSlider();
@@ -33,14 +34,12 @@
                 var heightToSet = calculateMinHeight();
                 $this.addClass("megaSlider").height(heightToSet);
                 currentSlide = options.startSlide;
-                nextSlide = options.startSlide + 1;
+                nextSlide = options.startSlide+1;
             }
 
             //main change slide function
             function changeSlide(effect) {
                 options.beforeSlide();
-
-
 
                 options.afterSlide();
             }
