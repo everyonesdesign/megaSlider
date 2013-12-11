@@ -4,8 +4,22 @@
     <title>megaSlider</title>
     <link rel="stylesheet" type="text/css" href="css/normalize.css"/>
     <link rel="stylesheet" type="text/css" href="css/styles.css"/>
+    <link rel="stylesheet" type="text/css" href="css/megaSlider.css"/>
 </head>
 <body>
 
+<div id="slider">
+    <img src="img/pic1.jpg" alt=""/>
+    <img src="img/pic2.jpg" alt=""/>
+    <img src="img/pic3.jpg" alt=""/>
+</div>
+
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/megaSlider.min.js"></script>
+<script type="text/javascript">
+    $(window).on("load", function() {
+       $("#slider").megaSlider();
+    });
+</script>
 </body>
 </html>
