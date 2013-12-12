@@ -480,20 +480,51 @@
                 });
         };
 
-        //vertical blocks wave
+        //wave right
         slider.effects.waveToRight = function() {
+            waveEffects("waveToRight");
+        };
+
+        //wave left
+        slider.effects.waveToLeft = function() {
+            waveEffects("waveToLeft");
+        };
+
+        //general wave effects function
+        function waveEffects(effect) {
             var $currentSlide = $slides.eq(currentSlide),
                 $nextSlide = $slides.eq(nextSlide);
+
+            //creating blocks for wave
             for (var i=0; i<slider.options.horizontalBlocks; i++) {
+
+                //creating clone of current slide, insert it and set its width to be equal with original one
                 var $clone = $currentSlide.clone()
                     .appendTo($slidesWrap)
                     .wrap("<div></div>")
                     .css({
-                            "left": -Math.ceil(slider._width/slider.options.horizontalBlocks)*i + "px",
                             "width": $currentSlide.width(),
                             "max-width": "none"
                         }),
-                $parent = $clone.parent();
+
+                    //added wrap to a variable
+                    $parent = $clone.parent();
+
+                //depending on effect set corrections
+                if (effect == "waveToRight") {
+                    $clone.css({
+                        "left": -Math.ceil(slider._width/slider.options.horizontalBlocks)*i + "px",
+                    });
+                    $parent.css("left", i*Math.ceil(slider._width/slider.options.horizontalBlocks) + "px");
+                } else if (effect == "waveToLeft") {
+                    $clone.css({
+                        "right": -Math.ceil(slider._width/slider.options.horizontalBlocks)*i + "px",
+                        "left": "auto"
+                    });
+                    $parent.css("right", i*Math.ceil(slider._width/slider.options.horizontalBlocks) + "px");
+                }
+
+                //wrap basic styles and animation
                 $parent
                     .css({
                     "position": "absolute",
@@ -501,8 +532,7 @@
                     "overflow": "hidden",
                     "height": "100%",
                     "width": Math.ceil(slider._width/slider.options.horizontalBlocks) + "px",
-                    "top": 0,
-                    "left": i*Math.ceil(slider._width/slider.options.horizontalBlocks) + "px"
+                    "top": 0
                 }).animate({
                     "opacity": 0
                 }, {
@@ -512,14 +542,17 @@
                     }
                 });
             }
+
+            //show next slide, hide previous
             $nextSlide.css("left", 0);
             hideSlides($currentSlide);
+
+            //end of transition
             setTimeout(function() {
                 isSliderAnimated = false;
                 setNewSlidesNumbers();
             }, slider.options.duration)
-        };
-
+        }
 
         return this;
     }
