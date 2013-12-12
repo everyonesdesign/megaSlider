@@ -15,7 +15,7 @@
         //setting options
         var defaults = {
             //props
-            effects: "moveToRight",
+            effects: "all",
             auto: false,
             pause: 5000,
             duration: 500,
@@ -100,18 +100,29 @@
             slider.options.onSliderLoad();
         }
 
-        function generateRandomEffect() {
-            var effectsArray = slider.options.effects.split(","),
-                effectsMax = effectsArray.length-1,
-                randomEffectNumber = Math.floor(Math.random() * (effectsMax + 1));
-            return effectsArray[randomEffectNumber];
+        function generateEffectName() {
+            var effectName,
+                effectsArray = [],
+                effectsMax,
+                randomEffectNumber;
+            if (slider.options.effects === "all") {
+                $.each(slider.effects, function(index, value) {
+                    effectsArray.push(index);
+                });
+            } else {
+                effectsArray = slider.options.effects.split(",");
+            }
+            effectsMax = effectsArray.length-1;
+            randomEffectNumber = Math.floor(Math.random() * (effectsMax + 1));
+            effectName = effectsArray[randomEffectNumber];
+            return effectName;
         }
 
         //go to next slide. actually, this function just takes currentSlide and nextSlide numbers and makes the transition
         function goToNextSlide() {
             slider.options.beforeSlide();
 
-            var effect = generateRandomEffect();
+            var effect = generateEffectName();
             if (typeof(slider.effects[effect]) === "function") slider.effects[effect](); //if effect if defined execute it
                 else console.error("The specified effect \"" + effect + "\" is missing"); //else error
 
