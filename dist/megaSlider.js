@@ -5,7 +5,7 @@
 
         if(this.length == 0) return this;
 
-        // support multiple elements
+        // multiple elements support
         if(this.length > 1){
             this.each(function(){$(this).megaSlider(options)});
             return this;
@@ -81,6 +81,7 @@
             slider.options.beforeSlide();
             var effect = slider.options.effects;
             if (typeof(slider.effects[effect]) === "function") slider.effects[effect](); //if effect if defined execute it
+                else console.error("The specified effect \"" + effect + "\" is missing"); //else error
             slider.options.afterSlide();
         }
 
