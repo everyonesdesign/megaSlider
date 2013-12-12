@@ -17,49 +17,64 @@
                 pauseOnHover: true,
                 slideHeight: "min",
                 startSlide: 0,
+                reverse: false,
                 beforeSlide: function() {},
                 afterSlide: function() {},
                 onSliderLoad: function() {}
             };
 
-            var $this = $(this),
-                $images = $this.find("img"),
+            var $slider = $(this),
+                $images = $slider.find("img"),
+                slidesQty = $images.length,
                 $slides = $images.wrap("<div class='megaSlider-slide'>"),
                 currentSlide,
                 nextSlide;
 
-            //write options in $this object to be able to read/changethem later
-            $this.options = $.extend(defaults, options);
+            //write options in $slider object to be able to read/change them later
+            $slider.options = $.extend(defaults, options);
 
             //public methods
-            $this.goToNextSlide = function() {};
-            $this.goToPrevSlide = function() {};
-            $this.getSlideNumber = function() {};
-            $this.startAuto = function() {};
-            $this.stopAuto = function() {};
+            $slider.goToNextSlide = function() {};
+            $slider.goToPrevSlide = function() {};
+            $slider.getSlideNumber = function() {};
+            $slider.startAuto = function() {};
+            $slider.stopAuto = function() {};
 
             //slider initialization
             initSlider();
             function initSlider() {
                 var heightToSet = calculateMinHeight();
-                $this.addClass("megaSlider").height(heightToSet);
-                currentSlide = $this.options.startSlide;
-                nextSlide = $this.options.startSlide+1;
+                $slider.addClass("megaSlider").height(heightToSet);
+                currentSlide = $slider.options.startSlide;
+                if (!$slider.options.reverse) {
+                    nextSlide = increaseNumber(currentSlide);
+                } else {
+                    nextSlide = decreaseNumber(currentSlide);
+                }
+
+                $slider.options.onSliderLoad();
             }
 
-            //main change slide function
+            //slide change function
             function changeSlide(effect) {
-                $this.options.beforeSlide();
+                $slider.options.beforeSlide();
+                if (!$slider.options.reverse) {
+                    currentSlide = increaseNumber(currentSlide);
+                    nextSlide = increaseNumber(nextSlide);
+                } else {
+                    currentSlide = decreaseNumber(currentSlide);
+                    nextSlide = decreaseNumber(nextSlide);
+                }
 
-                $this.options.afterSlide();
+                $slider.options.afterSlide();
             }
 
             //calculate width and height of blocks before transition
             function calculateBlockHeightAndWidth() {
-                var width = $this.width(),
-                    height = $this.height(),
-                    blockWidth = width/$this.options.horizontalBlocks;
-                blockHeight = width/$this.options.verticalBlocks;
+                var width = $slider.width(),
+                    height = $slider.height(),
+                    blockWidth = width/$slider.options.horizontalBlocks,
+                    blockHeight = width/$slider.options.verticalBlocks;
                 return {
                     blockWidth: blockWidth,
                     blockHeight: blockHeight
@@ -69,7 +84,7 @@
             //function to calculate min height among images
             function calculateMinHeight() {
                 var minHeight = Infinity;
-                $images.each(function() {
+                $slides.each(function() {
                     var thisHeight = $(this).height();
                     if (thisHeight < minHeight) {
                         minHeight = thisHeight;
@@ -81,13 +96,37 @@
             //function to calculate max height among images
             function calculateMaxHeight() {
                 var maxHeight = 0;
-                $images.each(function() {
+                $slides.each(function() {
                     var thisHeight = $(this).height();
                     if (thisHeight > minHeight) {
                         maxHeight = thisHeight;
                     }
                 });
                 return maxHeight;
+            }
+
+            //correctly increase slide number
+            //not affects argument value
+            function increaseNumber(numberToIncrease) {
+                var innerNumber = numberToIncrease;
+                if (innerNumber+1<slidesQty) {
+                    ++innerNumber
+                } else {
+                    innerNumber = 0;
+                }
+                return innerNumber;
+            }
+
+            //correctly decrease slide number
+            //not affects argument value
+            function decreaseNumber(numberToDecrease) {
+                var innerNumber = numberToDecrease;
+                if (innerNumber>0) {
+                    --innerNumber
+                } else {
+                    innerNumber = slidesQty-1;
+                }
+                return innerNumber;
             }
 
         });
