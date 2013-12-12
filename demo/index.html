@@ -10,9 +10,9 @@
 
 <div class="container">
     <div id="slider">
-        <img src="img/pic1.jpg" alt=""/>
-        <img src="img/pic2.jpg" alt=""/>
-        <img src="img/pic3.jpg" alt=""/>
+        <img src="img/pic1.jpg"  alt=""/>
+        <img src="img/pic2.jpg"  alt=""/>
+        <img src="img/pic3.jpg"  alt=""/>
     </div>
 </div>
 
@@ -23,10 +23,13 @@
        var slider = $("#slider").megaSlider({
            pause: 2000,
            duration: 800,
-           effects: "waveToTop,waveToBottom",
-           auto: true,
+           effects: "all",
+//           auto: true,
            horizontalBlocks: 12
        });
+        $("body").click(function() {
+            slider.goToNextSlide("fade")
+        });
     });
 </script>
 </body>

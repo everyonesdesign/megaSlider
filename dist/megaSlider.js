@@ -48,9 +48,9 @@
         slider.options = $.extend(defaults, options);
 
         //public methods
-        slider.goToNextSlide = function() {goToNextSlide(); return this;};
-        slider.goToPrevSlide = function() {goToPrevSlide(); return this;};
-        slider.goToSlide = function(slideNumber) {goToSlide(slideNumber); return this;};
+        slider.goToNextSlide = function(customEffect) {goToNextSlide(customEffect); return this;};
+        slider.goToPrevSlide = function(customEffect) {goToPrevSlide(customEffect); return this;};
+        slider.goToSlide = function(slideNumber, customEffect) {goToSlide(slideNumber, customEffect); return this;};
         slider.getSlideNumber = function() {return currentSlide;};
         slider.startAuto = function() {startAuto(); return this;};
         slider.stopAuto = function() {stopAuto(); return this;};
@@ -118,28 +118,31 @@
         }
 
         //go to next slide. actually, this function just takes currentSlide and nextSlide numbers and makes the transition
-        function goToNextSlide() {
-            if (isSliderAnimated) return;
-            slider.options.beforeSlide(nextSlide);
-            isSliderAnimated = true;
-            var effect = generateEffectName();
+        function goToNextSlide(customEffect) {
+            if (isSliderAnimated) return; //if transition in process
+            slider.options.beforeSlide(nextSlide); //callback
+            isSliderAnimated = true; //show that slider is animated then
+            var effect = generateEffectName(), //get effect from list
+                dataAttributeEffect = $slides.eq(nextSlide).data("effect");
+            if (dataAttributeEffect) effect = dataAttributeEffect; //if attribute effect is set, use it
+            if (customEffect) effect = customEffect; //if argument effect is set, use it (NOTE: it has highest priority)
             if (typeof(slider.effects[effect]) === "function") slider.effects[effect](); //if effect if defined execute it
             else console.error("The specified effect \"" + effect + "\" is missing"); //else error
-            slider.options.afterSlide(nextSlide);
+            slider.options.afterSlide(nextSlide); //callback
         }
 
         //go to prev slide. works by setting next slide lower than current one by 1
-        function goToPrevSlide() {
+        function goToPrevSlide(customEffect) {
             if (isSliderAnimated) return;
             nextSlide = decreaseNumber(currentSlide);
-            goToNextSlide();
+            goToNextSlide(customEffect);
         }
 
         //go to slide with number passed as argument
-        function goToSlide(slideNumber) {
+        function goToSlide(slideNumber, customEffect) {
             if (isSliderAnimated) return;
             nextSlide = slideNumber;
-            goToNextSlide();
+            goToNextSlide(customEffect);
         }
 
         function setSliderHeight() {
