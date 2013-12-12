@@ -14,6 +14,7 @@
 
         //setting options
         var defaults = {
+            //props
             auto: false,
             pause: 5000,
             duration: 500,
@@ -23,6 +24,9 @@
             slideHeight: "min",
             startSlide: 0,
             reverse: false,
+            cyclic: false,
+            infinite: true,
+            //callbacks
             beforeSlide: function() {},
             afterSlide: function() {},
             onSliderLoad: function() {}
@@ -32,7 +36,7 @@
             $slider = $(slider),
             $images = $slider.find("img"),
             slidesQty = $images.length,
-            $slides = $images.wrap("<div class='megaSlider-slide'>"),
+            $slides = $images.wrap("<div class='megaSlider-slide'>").parent(),
             currentSlide,
             nextSlide;
 
@@ -45,18 +49,20 @@
         slider.getSlideNumber = function() {};
         slider.startAuto = function() {};
         slider.stopAuto = function() {};
+        slider.destroy = function() {};
 
         //slider initialization
         initSlider();
         function initSlider() {
             var heightToSet = calculateMinHeight();
-            $slider.addClass("megaSlider").height(heightToSet);
+            $slider.addClass("megaSlider").css({"position": "relative"}).height(heightToSet);
             currentSlide = slider.options.startSlide;
             if (!slider.options.reverse) {
                 nextSlide = increaseNumber(currentSlide);
             } else {
                 nextSlide = decreaseNumber(currentSlide);
             }
+            $slides.css({"position": "absolute", "top": 0,  "left": "-9999px"}).eq(currentSlide).css({"left": 0});
 
             slider.options.onSliderLoad();
         }
@@ -134,6 +140,19 @@
             }
             return innerNumber;
         }
+
+
+        /*** EFFECTS FOR SLIDER***/
+        slider.effects = {};
+
+        //move to right
+        slider.effects.moveToRight = function() {
+            var $curSlide = $slides.eq(currentSlide);
+            var $nextSlide = $slides.eq(nextSlide);
+        };
+
+
+
 
         return this;
     }
