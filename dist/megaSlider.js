@@ -44,8 +44,8 @@
         slider.options = $.extend(defaults, options);
 
         //public methods
-        slider.goToNextSlide = function() {};
-        slider.goToPrevSlide = function() {};
+        slider.goToNextSlide = function() {goToNextSlide()};
+        slider.goToPrevSlide = function() {goToPrevSlide()};
         slider.getSlideNumber = function() {};
         slider.startAuto = function() {};
         slider.stopAuto = function() {};
@@ -76,15 +76,19 @@
         }
 
         //slide change function
-        function changeSlide() {
+        function goToNextSlide() {
             slider.options.beforeSlide();
-
             var effect = slider.options.effects;
-
             if (typeof(slider.effects[effect]) === "function") slider.effects[effect](); //if effect if defined execute it
-
             slider.options.afterSlide();
         }
+
+        function goToPrevSlide() {
+            nextSlide = decreaseNumber(currentSlide);
+            goToNextSlide();
+        }
+
+
 
         function setSliderWidthAndHeight() {
             slider._width = $slider.width();
@@ -152,17 +156,17 @@
         //increase/decrease slides number according to slider direction
         function setNewSlidesNumbers() {
             if (!slider.options.reverse) {
-                currentSlide = increaseNumber(currentSlide);
                 nextSlide = increaseNumber(nextSlide);
+                currentSlide = decreaseNumber(nextSlide);
             } else {
-                currentSlide = decreaseNumber(currentSlide);
                 nextSlide = decreaseNumber(nextSlide);
+                currentSlide = increaseNumber(nextSlide);
             }
         }
 
         function startAuto() {
             if (slider.auto) return;
-            slider.auto = setInterval(changeSlide, slider.options.pause);
+            slider.auto = setInterval(goToNextSlide, slider.options.pause);
         }
 
         function stopAuto() {
