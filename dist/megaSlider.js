@@ -1,4 +1,5 @@
 //TODO add effects, controls, pagination, previews, autoheight
+//TODO make slider responsive
 ;
 (function($) {
     $.fn.megaSlider = function(options) {
@@ -50,7 +51,12 @@
         slider.getSlideNumber = function() {return currentSlide;};
         slider.startAuto = function() {startAuto(); return this;};
         slider.stopAuto = function() {stopAuto(); return this;};
-        slider.destroy = function() {};
+        slider.destroy = function() {
+            $slider.removeClass("megaSlider");
+            $slides.removeClass("megaSlider-slide").each(function() {
+                $(this)[0].removeAttribute("style");
+            });
+        };
 
         //slider initialization
         initSlider();
