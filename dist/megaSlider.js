@@ -44,11 +44,11 @@
         slider.options = $.extend(defaults, options);
 
         //public methods
-        slider.goToNextSlide = function() {goToNextSlide()};
-        slider.goToPrevSlide = function() {goToPrevSlide()};
-        slider.getSlideNumber = function() {};
-        slider.startAuto = function() {};
-        slider.stopAuto = function() {};
+        slider.goToNextSlide = function() {goToNextSlide();};
+        slider.goToPrevSlide = function() {goToPrevSlide();};
+        slider.getSlideNumber = function() {return currentSlide;};
+        slider.startAuto = function() {startAuto();};
+        slider.stopAuto = function() {stopAuto();};
         slider.destroy = function() {};
 
         //slider initialization
