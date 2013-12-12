@@ -52,11 +52,12 @@
         slider.getSlideNumber = function() {return currentSlide;};
         slider.startAuto = function() {startAuto(); return this;};
         slider.stopAuto = function() {stopAuto(); return this;};
-        slider.update = function(options) {
+        slider.update = function(options) { //change slider options
             slider.options = $.extend(slider.options, options);
         };
-        slider.destroy = function() {
-            $slider.removeClass("megaSlider");
+        slider.destroy = function() {  //remove slider
+            $slider.removeClass("megaSlider")[0].removeAttribute("style");
+            stopAuto();
             $slides.removeClass("megaSlider-slide").unwrap().each(function() {
                 $(this)[0].removeAttribute("style");
             });
