@@ -28,6 +28,7 @@
             reverse: false,
             cyclic: false,
             infinite: true,
+            responsive: true,
             //callbacks
             beforeSlide: function() {},
             afterSlide: function() {},
@@ -88,7 +89,7 @@
             $slides.wrapAll("<div class='megaSlider-slides'>").css("position", "absolute").eq(currentSlide).css({"left": 0});
 
             //set slider width and height variables
-            calcSliderWidthAndHeight();
+            updateSliderWidthAndHeight();
 
             //start auto
             if (slider.options.auto) startAuto();
@@ -122,7 +123,7 @@
         }
 
         //general function to calculate slider width and height
-        function calcSliderWidthAndHeight() {
+        function updateSliderWidthAndHeight() {
             slider._width = $slider.width();
             slider._height = $slider.height();
         }
@@ -213,8 +214,12 @@
             $slide.css({"top": 0, "left": "-9999px", "z-index": ""});
         }
 
-
-
+        //responsive slider version
+        makeSliderResponsive();
+        function makeSliderResponsive() {
+            if (!slider.options.responsive) return;
+            $("window").resize(updateSliderWidthAndHeight);
+        }
 
 
 
