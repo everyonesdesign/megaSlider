@@ -174,7 +174,7 @@
         }
 
         function hideSlide($slide) {
-            $slide.css({"top": 0, "left": "-9999px", "z-index": "auto"});
+            $slide.css({"top": 0, "left": "-9999px", "z-index": ""});
         }
 
 
@@ -243,11 +243,68 @@
                     });
         };
 
+        //move to bottom
+        slider.effects.moveToBottom = function() {
+            var $currentSlide = $slides.eq(currentSlide);
+            var $nextSlide = $slides.eq(nextSlide);
+            $currentSlide.animate(
+                    {
+                        "top": slider._height
+                    },
+                    {
+                        "duration": slider.options.duration,
+                        "easing": slider.options.easing
+                    }
+            );
+            $nextSlide
+                .css({"top": -slider._height, "left": 0})
+                .animate(
+                    {
+                        "top": 0
+                    },
+                    {
+                        "duration": slider.options.duration,
+                        "easing": slider.options.easing,
+                        "complete": function() {
+                            hideSlide($currentSlide);
+                            setNewSlidesNumbers();
+                        }
+                    });
+        };
+
+        //move to top
+        slider.effects.moveToTop = function() {
+            var $currentSlide = $slides.eq(currentSlide);
+            var $nextSlide = $slides.eq(nextSlide);
+            $currentSlide.animate(
+                    {
+                        "top": -slider._height
+                    },
+                    {
+                        "duration": slider.options.duration,
+                        "easing": slider.options.easing
+                    }
+            );
+            $nextSlide
+                .css({"top": slider._height, "left": 0})
+                .animate(
+                    {
+                        "top": 0
+                    },
+                    {
+                        "duration": slider.options.duration,
+                        "easing": slider.options.easing,
+                        "complete": function() {
+                            hideSlide($currentSlide);
+                            setNewSlidesNumbers();
+                        }
+                    });
+        };
+
         //move onto right
         slider.effects.moveOntoRight = function() {
             var $currentSlide = $slides.eq(currentSlide);
             var $nextSlide = $slides.eq(nextSlide);
-            $currentSlide.css("z-index", "auto");
             $nextSlide
                 .css({"left": -slider._width, "z-index": 1})
                 .animate(
@@ -259,7 +316,7 @@
                         "easing": slider.options.easing,
                         "complete": function() {
                             hideSlide($currentSlide);
-                            $nextSlide.css("z-index", "auto");
+                            $nextSlide.css("z-index", "");
                             setNewSlidesNumbers();
                         }
                     });
@@ -269,7 +326,6 @@
         slider.effects.moveOntoLeft = function() {
             var $currentSlide = $slides.eq(currentSlide);
             var $nextSlide = $slides.eq(nextSlide);
-            $currentSlide.css("z-index", "auto");
             $nextSlide
                 .css({"left": slider._width, "z-index": 1})
                 .animate(
@@ -281,7 +337,49 @@
                         "easing": slider.options.easing,
                         "complete": function() {
                             hideSlide($currentSlide);
-                            $nextSlide.css("z-index", "auto");
+                            $nextSlide.css("z-index", "");
+                            setNewSlidesNumbers();
+                        }
+                    });
+        };
+
+        //move onto bottom
+        slider.effects.moveOntoBottom = function() {
+            var $currentSlide = $slides.eq(currentSlide);
+            var $nextSlide = $slides.eq(nextSlide);
+            $nextSlide
+                .css({"top": -slider._height, "left": 0, "z-index": 1})
+                .animate(
+                    {
+                        "top": 0
+                    },
+                    {
+                        "duration": slider.options.duration,
+                        "easing": slider.options.easing,
+                        "complete": function() {
+                            hideSlide($currentSlide);
+                            $nextSlide.css("z-index", "");
+                            setNewSlidesNumbers();
+                        }
+                    });
+        };
+
+        //move onto top
+        slider.effects.moveOntoTop = function() {
+            var $currentSlide = $slides.eq(currentSlide);
+            var $nextSlide = $slides.eq(nextSlide);
+            $nextSlide
+                .css({"top": slider._height, "left": 0, "z-index": 1})
+                .animate(
+                    {
+                        "top": 0
+                    },
+                    {
+                        "duration": slider.options.duration,
+                        "easing": slider.options.easing,
+                        "complete": function() {
+                            hideSlide($currentSlide);
+                            $nextSlide.css("z-index", "");
                             setNewSlidesNumbers();
                         }
                     });
