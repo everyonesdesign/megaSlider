@@ -56,7 +56,7 @@
         };
         slider.destroy = function() {
             $slider.removeClass("megaSlider");
-            $slides.removeClass("megaSlider-slide").each(function() {
+            $slides.removeClass("megaSlider-slide").unwrap().each(function() {
                 $(this)[0].removeAttribute("style");
             });
         };
@@ -64,33 +64,48 @@
         //slider initialization
         initSlider();
         function initSlider() {
+            //calc slider height and set it
             var heightToSet;
             if (slider.options.slideHeight == "min") {
                 heightToSet = calculateMinHeight();
             } else {
                 heightToSet = calculateMaxHeight();
             }
+
+            //set basic css to slider element
             $slider.addClass("megaSlider").css({"position": "relative"}).height(heightToSet);
+
+            //set current and next slides number
             currentSlide = slider.options.startSlide;
             if (!slider.options.reverse) {
                 nextSlide = increaseNumber(currentSlide);
             } else {
                 nextSlide = decreaseNumber(currentSlide);
             }
+
+            //hide all slides except for the active one. wrap them
             hideSlides($slides);
             $slides.wrapAll("<div class='megaSlider-slides'>").css("position", "absolute").eq(currentSlide).css({"left": 0});
-            setSliderWidthAndHeight();
+
+            //set slider width and height variables
+            calcSliderWidthAndHeight();
+
+            //start auto
             if (slider.options.auto) startAuto();
             if (slider.options.stopAutoOnHover) $slider.hover(stopAuto, startAuto);
+
+            //onload callback execution
             slider.options.onSliderLoad();
         }
 
-        //slide change function
+        //go to next slide. actually, this function just takes currentSlide and nextSlide numbers and makes the transition
         function goToNextSlide() {
             slider.options.beforeSlide();
+
             var effect = slider.options.effects;
             if (typeof(slider.effects[effect]) === "function") slider.effects[effect](); //if effect if defined execute it
                 else console.error("The specified effect \"" + effect + "\" is missing"); //else error
+
             slider.options.afterSlide();
         }
 
@@ -107,7 +122,7 @@
         }
 
         //general function to calculate slider width and height
-        function setSliderWidthAndHeight() {
+        function calcSliderWidthAndHeight() {
             slider._width = $slider.width();
             slider._height = $slider.height();
         }
