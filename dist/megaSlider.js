@@ -1,5 +1,4 @@
-//TODO add $this.options to achieve slider object from outside
-//TODO add auto, effects, controls, previews, autoheight
+//TODO add effects, controls, previews, autoheight
 ;
 (function($) {
     $.fn.megaSlider = function(options) {
