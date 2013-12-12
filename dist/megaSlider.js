@@ -178,6 +178,10 @@
         }
 
 
+
+
+
+
         /*** EFFECTS FOR SLIDER***/
         slider.effects = {};
 
@@ -185,9 +189,7 @@
         slider.effects.moveToRight = function() {
             var $currentSlide = $slides.eq(currentSlide);
             var $nextSlide = $slides.eq(nextSlide);
-            $currentSlide
-                .css("z-index", "auto")
-                .animate(
+            $currentSlide.animate(
                     {
                         "left": slider._width
                     },
@@ -197,7 +199,7 @@
                     }
             );
             $nextSlide
-                .css({"left": -slider._width, "z-index": 1})
+                .css("left", -slider._width)
                 .animate(
                     {
                         "left": 0
@@ -207,7 +209,6 @@
                         "easing": slider.options.easing,
                         "complete": function() {
                             hideSlide($currentSlide);
-                            $nextSlide.css("z-index", "auto");
                             setNewSlidesNumbers();
                         }
                     });
@@ -217,9 +218,7 @@
         slider.effects.moveToLeft = function() {
             var $currentSlide = $slides.eq(currentSlide);
             var $nextSlide = $slides.eq(nextSlide);
-            $currentSlide
-                .css("z-index", "auto")
-                .animate(
+            $currentSlide.animate(
                     {
                         "left": -slider._width
                     },
@@ -229,7 +228,7 @@
                     }
             );
             $nextSlide
-                .css({"left": slider._width, "z-index": 1})
+                .css("left", slider._width)
                 .animate(
                     {
                         "left": 0
@@ -239,7 +238,6 @@
                         "easing": slider.options.easing,
                         "complete": function() {
                             hideSlide($currentSlide);
-                            $nextSlide.css("z-index", "auto");
                             setNewSlidesNumbers();
                         }
                     });
