@@ -51,6 +51,9 @@
         slider.getSlideNumber = function() {return currentSlide;};
         slider.startAuto = function() {startAuto(); return this;};
         slider.stopAuto = function() {stopAuto(); return this;};
+        slider.update = function(options) {
+            slider.options = $.extend(slider.options, options);
+        };
         slider.destroy = function() {
             $slider.removeClass("megaSlider");
             $slides.removeClass("megaSlider-slide").each(function() {
