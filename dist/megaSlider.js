@@ -37,7 +37,7 @@
 
         var slider = this, //define slider variable
             $slider = $(slider),
-            $slides = $slider.children().addClass("megaSlider-slide"),
+            $slides = $slider.children().addClass("megaSlider-slide").css("overflow", "hidden"),
             slidesQty = $slides.length,
             currentSlide,
             nextSlide;
@@ -66,13 +66,9 @@
         //slider initialization
         initSlider();
         function initSlider() {
+
             //calc slider height and set it
-            var heightToSet;
-            if (slider.options.slideHeight == "min") {
-                heightToSet = calculateMinHeight();
-            } else {
-                heightToSet = calculateMaxHeight();
-            }
+            setSliderHeight();
 
             //set basic css to slider element
             $slider.addClass("megaSlider").css({"position": "relative"}).height(heightToSet);
@@ -139,6 +135,16 @@
         function goToSlide(slideNumber) {
             nextSlide = slideNumber;
             goToNextSlide();
+        }
+
+        function setSliderHeight() {
+            var heightToSet = "";
+            if (slider.options.slideHeight == "min") {
+                heightToSet = calculateMinHeight();
+            } else if (slider.options.slideHeight == "max")  {
+                heightToSet = calculateMaxHeight();
+            }
+            $slider.height(heightToSet);
         }
 
         //general function to calculate slider width and height
@@ -237,7 +243,10 @@
         makeSliderResponsive();
         function makeSliderResponsive() {
             if (!slider.options.responsive) return;
-            $("window").resize(updateSliderWidthAndHeight);
+            $(window).resize(function() {
+                updateSliderWidthAndHeight();
+                setSliderHeight();
+            });
         }
 
 
