@@ -38,6 +38,7 @@
         var slider = this, //define slider variable
             $slider = $(slider),
             $slides = $slider.children().addClass("megaSlider-slide").css("overflow", "hidden"),
+            $slidesWrap,
             slidesQty = $slides.length,
             isSliderAnimated = false,
             currentSlide,
@@ -82,9 +83,10 @@
                 nextSlide = decreaseNumber(currentSlide);
             }
 
-            //hide all slides except for the active one. wrap them
+            //hide all slides except for the active one. wrap them, define slides wrap
             hideSlides($slides);
-            $slides.wrapAll("<div class='megaSlider-slides'>").css("position", "absolute").eq(currentSlide).css({"left": 0});
+            $slides.wrapAll("<div class='megaSlider-slides'>").css({"position": "absolute"}).eq(currentSlide).css({"left": 0});
+            $slidesWrap = $slides.parent();
 
             //set slider width and height variables
             updateSliderWidthAndHeight();
@@ -154,16 +156,6 @@
         function updateSliderWidthAndHeight() {
             slider._width = $slider.width();
             slider._height = $slider.height();
-        }
-
-        //calculate width and height of blocks before transition
-        function calculateBlockHeightAndWidth() {
-            var blockWidth = slider._width/slider.options.horizontalBlocks,
-                blockHeight = slider._height/slider.options.verticalBlocks;
-            return {
-                blockWidth: blockWidth,
-                blockHeight: blockHeight
-            }
         }
 
         //calculate min height among images
@@ -259,8 +251,8 @@
 
         //move to right
         slider.effects.moveToRight = function() {
-            var $currentSlide = $slides.eq(currentSlide);
-            var $nextSlide = $slides.eq(nextSlide);
+            var $currentSlide = $slides.eq(currentSlide),
+                $nextSlide = $slides.eq(nextSlide);
             $currentSlide.animate(
                 {
                     "left": slider._width
@@ -289,8 +281,8 @@
 
         //move to left
         slider.effects.moveToLeft = function() {
-            var $currentSlide = $slides.eq(currentSlide);
-            var $nextSlide = $slides.eq(nextSlide);
+            var $currentSlide = $slides.eq(currentSlide),
+                $nextSlide = $slides.eq(nextSlide);
             $currentSlide.animate(
                 {
                     "left": -slider._width
@@ -319,8 +311,8 @@
 
         //move to bottom
         slider.effects.moveToBottom = function() {
-            var $currentSlide = $slides.eq(currentSlide);
-            var $nextSlide = $slides.eq(nextSlide);
+            var $currentSlide = $slides.eq(currentSlide),
+                $nextSlide = $slides.eq(nextSlide);
             $currentSlide.animate(
                 {
                     "top": slider._height
@@ -349,8 +341,8 @@
 
         //move to top
         slider.effects.moveToTop = function() {
-            var $currentSlide = $slides.eq(currentSlide);
-            var $nextSlide = $slides.eq(nextSlide);
+            var $currentSlide = $slides.eq(currentSlide),
+                $nextSlide = $slides.eq(nextSlide);
             $currentSlide.animate(
                 {
                     "top": -slider._height
@@ -379,8 +371,8 @@
 
         //move onto right
         slider.effects.moveOntoRight = function() {
-            var $currentSlide = $slides.eq(currentSlide);
-            var $nextSlide = $slides.eq(nextSlide);
+            var $currentSlide = $slides.eq(currentSlide),
+                $nextSlide = $slides.eq(nextSlide);
             $nextSlide
                 .css({"left": -slider._width, "z-index": 1})
                 .animate(
@@ -401,8 +393,8 @@
 
         //move onto left
         slider.effects.moveOntoLeft = function() {
-            var $currentSlide = $slides.eq(currentSlide);
-            var $nextSlide = $slides.eq(nextSlide);
+            var $currentSlide = $slides.eq(currentSlide),
+                $nextSlide = $slides.eq(nextSlide);
             $nextSlide
                 .css({"left": slider._width, "z-index": 1})
                 .animate(
@@ -423,8 +415,8 @@
 
         //move onto bottom
         slider.effects.moveOntoBottom = function() {
-            var $currentSlide = $slides.eq(currentSlide);
-            var $nextSlide = $slides.eq(nextSlide);
+            var $currentSlide = $slides.eq(currentSlide),
+                $nextSlide = $slides.eq(nextSlide);
             $nextSlide
                 .css({"top": -slider._height, "left": 0, "z-index": 1})
                 .animate(
@@ -445,8 +437,8 @@
 
         //move onto top
         slider.effects.moveOntoTop = function() {
-            var $currentSlide = $slides.eq(currentSlide);
-            var $nextSlide = $slides.eq(nextSlide);
+            var $currentSlide = $slides.eq(currentSlide),
+                $nextSlide = $slides.eq(nextSlide);
             $nextSlide
                 .css({"top": slider._height, "left": 0, "z-index": 1})
                 .animate(
@@ -467,8 +459,8 @@
 
         //fade
         slider.effects.fade = function() {
-            var $currentSlide = $slides.eq(currentSlide);
-            var $nextSlide = $slides.eq(nextSlide);
+            var $currentSlide = $slides.eq(currentSlide),
+                $nextSlide = $slides.eq(nextSlide);
             $nextSlide
                 .css({"left": 0, "z-index": 1})
                 .animate({"opacity": 0}, 0) //animate used for IE lte 8 support
@@ -486,6 +478,46 @@
                         isSliderAnimated = false;
                     }
                 });
+        };
+
+        //vertical blocks wave
+        slider.effects.waveToRight = function() {
+            var $currentSlide = $slides.eq(currentSlide),
+                $nextSlide = $slides.eq(nextSlide);
+            for (var i=0; i<slider.options.horizontalBlocks; i++) {
+                var $clone = $currentSlide.clone()
+                    .appendTo($slidesWrap)
+                    .wrap("<div></div>")
+                    .css({
+                            "left": -Math.ceil(slider._width/slider.options.horizontalBlocks)*i + "px",
+                            "width": $currentSlide.width(),
+                            "max-width": "none"
+                        }),
+                $parent = $clone.parent();
+                $parent
+                    .css({
+                    "position": "absolute",
+                    "z-index": 2,
+                    "overflow": "hidden",
+                    "height": "100%",
+                    "width": Math.ceil(slider._width/slider.options.horizontalBlocks) + "px",
+                    "top": 0,
+                    "left": i*Math.ceil(slider._width/slider.options.horizontalBlocks) + "px"
+                }).animate({
+                    "opacity": 0
+                }, {
+                    "duration": slider.options.duration*(i+1)/(slider.options.horizontalBlocks+1),
+                    "complete": function() {
+                        $(this).remove();
+                    }
+                });
+            }
+            $nextSlide.css("left", 0);
+            hideSlides($currentSlide);
+            setTimeout(function() {
+                isSliderAnimated = false;
+                setNewSlidesNumbers();
+            }, slider.options.duration)
         };
 
 
