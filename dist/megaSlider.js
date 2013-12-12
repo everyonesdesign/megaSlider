@@ -21,7 +21,7 @@
             duration: 500,
             horizontalBlocks: 8,
             verticalBlocks: 4,
-            pauseOnHover: true,
+            stopAutoOnHover: true,
             slideHeight: "min",
             easing: "swing",
             startSlide: 0,
@@ -71,10 +71,9 @@
             }
             hideSlide($slides);
             $slides.css("position", "absolute").eq(currentSlide).css({"left": 0});
-
             setSliderWidthAndHeight();
-
             if (slider.options.auto) startAuto();
+            if (slider.options.stopAutoOnHover) $slider.hover(stopAuto, startAuto);
             slider.options.onSliderLoad();
         }
 
