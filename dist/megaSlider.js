@@ -78,7 +78,7 @@
                 nextSlide = decreaseNumber(currentSlide);
             }
             hideSlides($slides);
-            $slides.css("position", "absolute").eq(currentSlide).css({"left": 0});
+            $slides.wrapAll("<div class='megaSlider-slides'>").css("position", "absolute").eq(currentSlide).css({"left": 0});
             setSliderWidthAndHeight();
             if (slider.options.auto) startAuto();
             if (slider.options.stopAutoOnHover) $slider.hover(stopAuto, startAuto);
