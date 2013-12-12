@@ -23,42 +23,43 @@
                 onSliderLoad: function() {}
             };
 
-            var $slider = $(this),
+            var slider = this, //define slider variable
+                $slider = $(slider),
                 $images = $slider.find("img"),
                 slidesQty = $images.length,
                 $slides = $images.wrap("<div class='megaSlider-slide'>"),
                 currentSlide,
                 nextSlide;
 
-            //write options in $slider object to be able to read/change them later
-            $slider.options = $.extend(defaults, options);
+            //write options in slider object to be able to read/change them later
+            slider.options = $.extend(defaults, options);
 
             //public methods
-            $slider.goToNextSlide = function() {};
-            $slider.goToPrevSlide = function() {};
-            $slider.getSlideNumber = function() {};
-            $slider.startAuto = function() {};
-            $slider.stopAuto = function() {};
+            slider.goToNextSlide = function() {};
+            slider.goToPrevSlide = function() {};
+            slider.getSlideNumber = function() {};
+            slider.startAuto = function() {};
+            slider.stopAuto = function() {};
 
             //slider initialization
             initSlider();
             function initSlider() {
                 var heightToSet = calculateMinHeight();
                 $slider.addClass("megaSlider").height(heightToSet);
-                currentSlide = $slider.options.startSlide;
-                if (!$slider.options.reverse) {
+                currentSlide = slider.options.startSlide;
+                if (!slider.options.reverse) {
                     nextSlide = increaseNumber(currentSlide);
                 } else {
                     nextSlide = decreaseNumber(currentSlide);
                 }
 
-                $slider.options.onSliderLoad();
+                slider.options.onSliderLoad();
             }
 
             //slide change function
             function changeSlide(effect) {
-                $slider.options.beforeSlide();
-                if (!$slider.options.reverse) {
+                slider.options.beforeSlide();
+                if (!slider.options.reverse) {
                     currentSlide = increaseNumber(currentSlide);
                     nextSlide = increaseNumber(nextSlide);
                 } else {
@@ -66,15 +67,15 @@
                     nextSlide = decreaseNumber(nextSlide);
                 }
 
-                $slider.options.afterSlide();
+                slider.options.afterSlide();
             }
 
             //calculate width and height of blocks before transition
             function calculateBlockHeightAndWidth() {
                 var width = $slider.width(),
                     height = $slider.height(),
-                    blockWidth = width/$slider.options.horizontalBlocks,
-                    blockHeight = width/$slider.options.verticalBlocks;
+                    blockWidth = width/slider.options.horizontalBlocks,
+                    blockHeight = width/slider.options.verticalBlocks;
                 return {
                     blockWidth: blockWidth,
                     blockHeight: blockHeight
