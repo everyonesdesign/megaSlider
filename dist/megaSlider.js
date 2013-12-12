@@ -19,7 +19,7 @@
             pause: 5000, //pause between transitions if auto is enabled
             duration: 500, //each transition duration
             horizontalBlocks: 8, //number of horizontal blocks for box effects
-            verticalBlocks: 4, //number of vertical blocks for box effects
+            verticalBlocks: 6, //number of vertical blocks for box effects
             stopAutoOnHover: true, //stop auto when hovered
             slideHeight: "max", //how height of slider id defined.
                                 // "max" - slider gets max height of slides.
@@ -506,11 +506,13 @@
                 $nextSlide = $slides.eq(nextSlide),
                 blocksNumber,
                 blockMetrics;
-            if (effect=="waveToRight"||effect=="waveToLeft")  //horizontal transitions
+            if (effect=="waveToRight"||effect=="waveToLeft")  {//horizontal transitions
                 blocksNumber = slider.options.horizontalBlocks;
-            else                                              //vertical transitions
+                blockMetrics = Math.ceil(slider._width/blocksNumber);
+            }   else {                                        //vertical transitions
                 blocksNumber = slider.options.verticalBlocks;
-            blockMetrics = Math.ceil(slider._width/blocksNumber);
+                blockMetrics = Math.ceil(slider._height/blocksNumber);
+            }
 
             //creating blocks for wave
             for (var i=0; i<blocksNumber; i++) {
@@ -518,11 +520,7 @@
                 //creating clone of current slide, insert it and set its width to be equal with original one
                 var $clone = $currentSlide.clone()
                     .appendTo($slidesWrap)
-                    .wrap("<div></div>")
-                    .css({
-                            "width": $currentSlide.width(),
-                            "max-width": "none"
-                        }),
+                    .wrap("<div></div>"),
 
                     //added wrap to a variable
                     $parent = $clone.parent();
@@ -530,7 +528,9 @@
                 //depending on effect set corrections
                 if (effect == "waveToRight") {
                     $clone.css({
-                        "left": -blockMetrics*i + "px"
+                        "left": -blockMetrics*i + "px",
+                        "width": $currentSlide.width(),
+                        "max-width": "none"
                     });
                     $parent.css({
                         "top": 0,
@@ -541,7 +541,9 @@
                 } else if (effect == "waveToLeft") {
                     $clone.css({
                         "right": -blockMetrics*i + "px",
-                        "left": "auto"
+                        "left": "auto",
+                        "width": $currentSlide.width(),
+                        "max-width": "none"
                     });
                     $parent.css({
                         "top": 0,
@@ -551,7 +553,8 @@
                     });
                 } else if (effect == "waveToBottom") {
                     $clone.css({
-                        "top": -blockMetrics*i + "px"
+                        "top": -blockMetrics*i + "px",
+                        "height": $currentSlide.height()
                     });
                     $parent.css({
                         "left": 0,
@@ -562,7 +565,8 @@
                 } else if (effect == "waveToTop") {
                     $clone.css({
                         "bottom": -blockMetrics*i + "px",
-                        "top": "auto"
+                        "top": "auto",
+                        "height": $currentSlide.height()
                     });
                     $parent.css({
                         "left": 0,
@@ -577,7 +581,7 @@
                     .css({
                     "position": "absolute",
                     "z-index": 2,
-                    "overflow": "hidden",
+                    "overflow": "hidden"
                 }).animate({
                     "opacity": 0
                 }, {
