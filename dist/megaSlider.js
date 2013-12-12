@@ -67,7 +67,7 @@
             } else {
                 nextSlide = decreaseNumber(currentSlide);
             }
-            hideSlide($slides);
+            hideSlides($slides);
             $slides.css("position", "absolute").eq(currentSlide).css({"left": 0});
             setSliderWidthAndHeight();
             if (slider.options.auto) startAuto();
@@ -83,13 +83,13 @@
             slider.options.afterSlide();
         }
 
+        //go to prev slide. works by setting next slide lower than current one by 1
         function goToPrevSlide() {
             nextSlide = decreaseNumber(currentSlide);
             goToNextSlide();
         }
 
-
-
+        //general function to calculate slider width and height
         function setSliderWidthAndHeight() {
             slider._width = $slider.width();
             slider._height = $slider.height();
@@ -105,7 +105,7 @@
             }
         }
 
-        //function to calculate min height among images
+        //calculate min height among images
         function calculateMinHeight() {
             var minHeight = Infinity;
             $slides.each(function() {
@@ -117,7 +117,7 @@
             return minHeight;
         }
 
-        //function to calculate max height among images
+        //calculate max height among images
         function calculateMaxHeight() {
             var maxHeight = 0;
             $slides.each(function() {
@@ -164,17 +164,20 @@
             }
         }
 
+        //start autoplay
         function startAuto() {
             if (slider.auto) return;
             slider.auto = setInterval(goToNextSlide, slider.options.pause);
         }
 
+        //stop autoplay
         function stopAuto() {
             clearInterval(slider.auto);
             slider.auto = null;
         }
 
-        function hideSlide($slide) {
+        //hide slide or slides behind the scenes
+        function hideSlides($slide) {
             $slide.css({"top": 0, "left": "-9999px", "z-index": ""});
         }
 
@@ -209,7 +212,7 @@
                         "duration": slider.options.duration,
                         "easing": slider.options.easing,
                         "complete": function() {
-                            hideSlide($currentSlide);
+                            hideSlides($currentSlide);
                             setNewSlidesNumbers();
                         }
                     });
@@ -238,7 +241,7 @@
                         "duration": slider.options.duration,
                         "easing": slider.options.easing,
                         "complete": function() {
-                            hideSlide($currentSlide);
+                            hideSlides($currentSlide);
                             setNewSlidesNumbers();
                         }
                     });
@@ -267,7 +270,7 @@
                         "duration": slider.options.duration,
                         "easing": slider.options.easing,
                         "complete": function() {
-                            hideSlide($currentSlide);
+                            hideSlides($currentSlide);
                             setNewSlidesNumbers();
                         }
                     });
@@ -296,7 +299,7 @@
                         "duration": slider.options.duration,
                         "easing": slider.options.easing,
                         "complete": function() {
-                            hideSlide($currentSlide);
+                            hideSlides($currentSlide);
                             setNewSlidesNumbers();
                         }
                     });
@@ -316,7 +319,7 @@
                         "duration": slider.options.duration,
                         "easing": slider.options.easing,
                         "complete": function() {
-                            hideSlide($currentSlide);
+                            hideSlides($currentSlide);
                             $nextSlide.css("z-index", "");
                             setNewSlidesNumbers();
                         }
@@ -337,7 +340,7 @@
                         "duration": slider.options.duration,
                         "easing": slider.options.easing,
                         "complete": function() {
-                            hideSlide($currentSlide);
+                            hideSlides($currentSlide);
                             $nextSlide.css("z-index", "");
                             setNewSlidesNumbers();
                         }
@@ -358,7 +361,7 @@
                         "duration": slider.options.duration,
                         "easing": slider.options.easing,
                         "complete": function() {
-                            hideSlide($currentSlide);
+                            hideSlides($currentSlide);
                             $nextSlide.css("z-index", "");
                             setNewSlidesNumbers();
                         }
@@ -379,7 +382,7 @@
                         "duration": slider.options.duration,
                         "easing": slider.options.easing,
                         "complete": function() {
-                            hideSlide($currentSlide);
+                            hideSlides($currentSlide);
                             $nextSlide.css("z-index", "");
                             setNewSlidesNumbers();
                         }
