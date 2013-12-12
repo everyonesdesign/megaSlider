@@ -69,10 +69,12 @@
             } else {
                 nextSlide = decreaseNumber(currentSlide);
             }
-            $slides.css({"position": "absolute", "top": 0,  "left": "-9999px"}).eq(currentSlide).css({"left": 0});
-            slider._width = $slider.width();
-            slider._height = $slider.height();
+            hideSlide($slides);
+            $slides.css("position", "absolute").eq(currentSlide).css({"left": 0});
 
+            setSliderWidthAndHeight();
+
+            if (slider.options.auto) startAuto();
             slider.options.onSliderLoad();
         }
 
@@ -82,11 +84,14 @@
 
             var effect = slider.options.effects;
 
-            setNewSlidesNumbers();
-
             if (typeof(slider.effects[effect]) === "function") slider.effects[effect](); //if effect if defined execute it
 
             slider.options.afterSlide();
+        }
+
+        function setSliderWidthAndHeight() {
+            slider._width = $slider.width();
+            slider._height = $slider.height();
         }
 
         //calculate width and height of blocks before transition
@@ -168,13 +173,16 @@
             slider.auto = null;
         }
 
+        function hideSlide($slide) {
+            $slide.css({"top": 0, "left": "-9999px", "z-index": "auto"});
+        }
 
         /*** EFFECTS FOR SLIDER***/
         slider.effects = {};
 
         //move to right
         slider.effects.moveToRight = function() {
-            var $currentSlide = $slides.eq(currentSlide);
+            var $currentSlide = $slides.eq(currentSlide).css("z-index", "auto");
             var $nextSlide = $slides.eq(nextSlide);
             $nextSlide
                 .css({"left": -slider._width, "z-index": 1})
@@ -184,7 +192,12 @@
                     },
                     {
                         "duration": slider.options.duration,
-                        "easing": slider.options.easing
+                        "easing": slider.options.easing,
+                        "complete": function() {
+                            hideSlide($currentSlide);
+                            $nextSlide.css("z-index", "auto");
+                            setNewSlidesNumbers();
+                        }
                     });
         };
 
