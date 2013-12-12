@@ -36,9 +36,8 @@
 
         var slider = this, //define slider variable
             $slider = $(slider),
-            $images = $slider.find("img"),
-            slidesQty = $images.length,
-            $slides = $images.wrap("<div class='megaSlider-slide'>").parent(),
+            $slides = $slider.children().addClass("megaSlider-slide"),
+            slidesQty = $slides.length,
             currentSlide,
             nextSlide;
 
