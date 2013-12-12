@@ -147,6 +147,7 @@
             return innerNumber;
         }
 
+        //increase/decrease slides number according to slider direction
         function setNewSlidesNumbers() {
             if (!slider.options.reverse) {
                 currentSlide = increaseNumber(currentSlide);
@@ -155,6 +156,16 @@
                 currentSlide = decreaseNumber(currentSlide);
                 nextSlide = decreaseNumber(nextSlide);
             }
+        }
+
+        function startAuto() {
+            if (slider.auto) return;
+            slider.auto = setInterval(changeSlide, slider.options.pause);
+        }
+
+        function stopAuto() {
+            clearInterval(slider.auto);
+            slider.auto = null;
         }
 
 
