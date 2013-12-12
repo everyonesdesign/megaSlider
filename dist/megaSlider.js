@@ -54,7 +54,12 @@
         //slider initialization
         initSlider();
         function initSlider() {
-            var heightToSet = calculateMinHeight();
+            var heightToSet;
+            if (slider.options.slideHeight == "min") {
+                heightToSet = calculateMinHeight();
+            } else {
+                heightToSet = calculateMaxHeight();
+            }
             $slider.addClass("megaSlider").css({"position": "relative"}).height(heightToSet);
             currentSlide = slider.options.startSlide;
             if (!slider.options.reverse) {
