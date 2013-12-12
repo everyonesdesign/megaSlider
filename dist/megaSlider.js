@@ -1,4 +1,4 @@
-//TODO add effects, controls, previews, autoheight
+//TODO add effects, controls, pagination, previews, autoheight
 ;
 (function($) {
     $.fn.megaSlider = function(options) {
@@ -44,11 +44,12 @@
         slider.options = $.extend(defaults, options);
 
         //public methods
-        slider.goToNextSlide = function() {goToNextSlide();};
-        slider.goToPrevSlide = function() {goToPrevSlide();};
+        slider.goToNextSlide = function() {goToNextSlide(); return this;};
+        slider.goToPrevSlide = function() {goToPrevSlide(); return this;};
+        slider.goToSlide = function(slideNumber) {goToSlide(slideNumber); return this;};
         slider.getSlideNumber = function() {return currentSlide;};
-        slider.startAuto = function() {startAuto();};
-        slider.stopAuto = function() {stopAuto();};
+        slider.startAuto = function() {startAuto(); return this;};
+        slider.stopAuto = function() {stopAuto(); return this;};
         slider.destroy = function() {};
 
         //slider initialization
@@ -86,6 +87,12 @@
         //go to prev slide. works by setting next slide lower than current one by 1
         function goToPrevSlide() {
             nextSlide = decreaseNumber(currentSlide);
+            goToNextSlide();
+        }
+
+        //go to slide with number passed as argument
+        function goToSlide(slideNumber) {
+            nextSlide = slideNumber;
             goToNextSlide();
         }
 
