@@ -406,6 +406,28 @@
                     });
         };
 
+        //fade
+        slider.effects.fade = function() {
+            var $currentSlide = $slides.eq(currentSlide);
+            var $nextSlide = $slides.eq(nextSlide);
+            $nextSlide
+                .css({"left": 0, "z-index": 1})
+                .animate({"opacity": 0}, 0) //animate used for IE lte 8 support
+                .animate(
+                    {
+                        "opacity": 1
+                    },
+                    {
+                        "duration": slider.options.duration,
+                        "easing": slider.options.easing,
+                        "complete": function() {
+                            hideSlides($currentSlide);
+                            $nextSlide.css("z-index", "");
+                            setNewSlidesNumbers();
+                        }
+                    });
+        };
+
 
         return this;
     }
