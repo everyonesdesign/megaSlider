@@ -14,24 +14,25 @@
         //setting options
         var defaults = {
             //props
-            effects: "all",
-            auto: false,
-            pause: 5000,
-            duration: 500,
-            horizontalBlocks: 8,
-            verticalBlocks: 4,
-            stopAutoOnHover: true,
-            slideHeight: "min",
-            easing: "swing",
-            startSlide: 0,
-            reverse: false,
-            cyclic: false,
-            infinite: true,
-            responsive: true,
+            effects: "all", //effect, list of effects divided with "," or keyword "all" which will implement all available effects
+            auto: false, //autoplay
+            pause: 5000, //pause between transitions if auto is enabled
+            duration: 500, //each transition duration
+            horizontalBlocks: 8, //number of horizontal blocks for box effects
+            verticalBlocks: 4, //number of vertical blocks for box effects
+            stopAutoOnHover: true, //stop auto when hovered
+            slideHeight: "max", //how height of slider id defined.
+                                // "max" - slider gets max height of slides.
+                                // "min" - slider gets min height of slides cutting some elements
+                                // "auto" - slider adapts for each element
+            easing: "swing", //transition easing
+            startSlide: 0, //number of init slide, zero-based
+            reverse: false, //play in reverse direction
+            responsive: true, //dynamically changes slider height
             //callbacks
-            beforeSlide: function() {},
-            afterSlide: function() {},
-            onSliderLoad: function() {}
+            beforeSlide: function() {}, //executed just before transition. first argument is active slide number
+            afterSlide: function() {}, //executed just after transition. first argument is active slide number
+            onSliderLoad: function() {} //executed when slider has been initialized
         };
 
         var slider = this, //define slider variable
@@ -117,12 +118,12 @@
         //go to next slide. actually, this function just takes currentSlide and nextSlide numbers and makes the transition
         function goToNextSlide() {
             if (isSliderAnimated) return;
-            slider.options.beforeSlide();
+            slider.options.beforeSlide(nextSlide);
             isSliderAnimated = true;
             var effect = generateEffectName();
             if (typeof(slider.effects[effect]) === "function") slider.effects[effect](); //if effect if defined execute it
             else console.error("The specified effect \"" + effect + "\" is missing"); //else error
-            slider.options.afterSlide();
+            slider.options.afterSlide(nextSlide);
         }
 
         //go to prev slide. works by setting next slide lower than current one by 1
@@ -182,7 +183,7 @@
             var maxHeight = 0;
             $slides.each(function() {
                 var thisHeight = $(this).height();
-                if (thisHeight > minHeight) {
+                if (thisHeight > maxHeight) {
                     maxHeight = thisHeight;
                 }
             });
