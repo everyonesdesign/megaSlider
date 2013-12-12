@@ -100,11 +100,18 @@
             slider.options.onSliderLoad();
         }
 
+        function generateRandomEffect() {
+            var effectsArray = slider.options.effects.split(","),
+                effectsMax = effectsArray.length-1,
+                randomEffectNumber = Math.floor(Math.random() * (effectsMax + 1));
+            return effectsArray[randomEffectNumber];
+        }
+
         //go to next slide. actually, this function just takes currentSlide and nextSlide numbers and makes the transition
         function goToNextSlide() {
             slider.options.beforeSlide();
 
-            var effect = slider.options.effects;
+            var effect = generateRandomEffect();
             if (typeof(slider.effects[effect]) === "function") slider.effects[effect](); //if effect if defined execute it
                 else console.error("The specified effect \"" + effect + "\" is missing"); //else error
 
