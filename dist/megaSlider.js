@@ -15,6 +15,7 @@
         //setting options
         var defaults = {
             //props
+            effects: "moveToRight",
             auto: false,
             pause: 5000,
             duration: 500,
@@ -22,6 +23,7 @@
             verticalBlocks: 4,
             pauseOnHover: true,
             slideHeight: "min",
+            easing: "swing",
             startSlide: 0,
             reverse: false,
             cyclic: false,
@@ -68,30 +70,29 @@
                 nextSlide = decreaseNumber(currentSlide);
             }
             $slides.css({"position": "absolute", "top": 0,  "left": "-9999px"}).eq(currentSlide).css({"left": 0});
+            slider._width = $slider.width();
+            slider._height = $slider.height();
 
             slider.options.onSliderLoad();
         }
 
         //slide change function
-        function changeSlide(effect) {
+        function changeSlide() {
             slider.options.beforeSlide();
-            if (!slider.options.reverse) {
-                currentSlide = increaseNumber(currentSlide);
-                nextSlide = increaseNumber(nextSlide);
-            } else {
-                currentSlide = decreaseNumber(currentSlide);
-                nextSlide = decreaseNumber(nextSlide);
-            }
+
+            var effect = slider.options.effects;
+
+            setNewSlidesNumbers();
+
+            if (typeof(slider.effects[effect]) === "function") slider.effects[effect](); //if effect if defined execute it
 
             slider.options.afterSlide();
         }
 
         //calculate width and height of blocks before transition
         function calculateBlockHeightAndWidth() {
-            var width = $slider.width(),
-                height = $slider.height(),
-                blockWidth = width/slider.options.horizontalBlocks,
-                blockHeight = width/slider.options.verticalBlocks;
+            var blockWidth = slider._width/slider.options.horizontalBlocks,
+                blockHeight = slider._height/slider.options.verticalBlocks;
             return {
                 blockWidth: blockWidth,
                 blockHeight: blockHeight
@@ -146,17 +147,35 @@
             return innerNumber;
         }
 
+        function setNewSlidesNumbers() {
+            if (!slider.options.reverse) {
+                currentSlide = increaseNumber(currentSlide);
+                nextSlide = increaseNumber(nextSlide);
+            } else {
+                currentSlide = decreaseNumber(currentSlide);
+                nextSlide = decreaseNumber(nextSlide);
+            }
+        }
+
 
         /*** EFFECTS FOR SLIDER***/
         slider.effects = {};
 
         //move to right
         slider.effects.moveToRight = function() {
-            var $curSlide = $slides.eq(currentSlide);
+            var $currentSlide = $slides.eq(currentSlide);
             var $nextSlide = $slides.eq(nextSlide);
+            $nextSlide
+                .css({"left": -slider._width, "z-index": 1})
+                .animate(
+                    {
+                        "left": 0
+                    },
+                    {
+                        "duration": slider.options.duration,
+                        "easing": slider.options.easing
+                    });
         };
-
-
 
 
         return this;
