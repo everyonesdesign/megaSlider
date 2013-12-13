@@ -258,22 +258,22 @@
         slider.effects = {};
 
         //move to right
-        slider.effects.moveToRight = function() {
+        slider.effects.moveRight = function() {
             moveEffects("moveToRight");
         };
 
         //move to left
-        slider.effects.moveToLeft = function() {
+        slider.effects.moveLeft = function() {
             moveEffects("moveToLeft");
         };
 
         //move to bottom
-        slider.effects.moveToBottom = function() {
+        slider.effects.moveBottom = function() {
             moveEffects("moveToBottom");
         };
 
         //move to top
-        slider.effects.moveToTop = function() {
+        slider.effects.moveTop = function() {
             moveEffects("moveToTop");
         };
 
@@ -418,22 +418,22 @@
         };
 
         //wave right
-        slider.effects.waveToRight = function() {
+        slider.effects.waveRight = function() {
             waveEffects("waveToRight");
         };
 
         //wave left
-        slider.effects.waveToLeft = function() {
+        slider.effects.waveLeft = function() {
             waveEffects("waveToLeft");
         };
 
         //wave bottom
-        slider.effects.waveToBottom = function() {
+        slider.effects.waveBottom = function() {
             waveEffects("waveToBottom");
         };
 
         //wave top
-        slider.effects.waveToTop = function() {
+        slider.effects.waveTop = function() {
             waveEffects("waveToTop");
         };
 
@@ -535,9 +535,24 @@
         }
 
 
+        //wave bottom right
+        slider.effects.waveBottomRight = function() {
+            waveDiagonalEffects("waveBottomRight");
+        };
+        //wave bottom left
+        slider.effects.waveBottomLeft = function() {
+            waveDiagonalEffects("waveBottomLeft");
+        };
+        //wave top right
+        slider.effects.waveTopRight = function() {
+            waveDiagonalEffects("waveTopRight");
+        };
+        //wave top left
+        slider.effects.waveTopLeft = function() {
+            waveDiagonalEffects("waveTopLeft");
+        };
 
-
-        //wave diagonally
+        //wave diagonally general function
         function waveDiagonalEffects() {
             var $currentSlide = $slides.eq(currentSlide),
                 $nextSlide = $slides.eq(nextSlide);
