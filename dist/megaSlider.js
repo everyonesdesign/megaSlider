@@ -269,58 +269,12 @@
 
         //move to bottom
         slider.effects.moveToBottom = function() {
-            var $currentSlide = $slides.eq(currentSlide),
-                $nextSlide = $slides.eq(nextSlide);
-            $currentSlide.animate(
-                {
-                    "top": slider._height
-                },
-                {
-                    "duration": slider.options.duration,
-                    "easing": slider.options.easing
-                }
-            );
-            $nextSlide
-                .css({"top": -slider._height, "left": 0})
-                .animate(
-                {
-                    "top": 0
-                },
-                {
-                    "duration": slider.options.duration,
-                    "easing": slider.options.easing,
-                    "complete": function() {
-                        hideSlides($currentSlide);
-                    }
-                });
+            moveEffects("moveToBottom");
         };
 
         //move to top
         slider.effects.moveToTop = function() {
-            var $currentSlide = $slides.eq(currentSlide),
-                $nextSlide = $slides.eq(nextSlide);
-            $currentSlide.animate(
-                {
-                    "top": -slider._height
-                },
-                {
-                    "duration": slider.options.duration,
-                    "easing": slider.options.easing
-                }
-            );
-            $nextSlide
-                .css({"top": slider._height, "left": 0})
-                .animate(
-                {
-                    "top": 0
-                },
-                {
-                    "duration": slider.options.duration,
-                    "easing": slider.options.easing,
-                    "complete": function() {
-                        hideSlides($currentSlide);
-                    }
-                });
+            moveEffects("moveToTop");
         };
 
 
@@ -348,10 +302,10 @@
                             hideSlides($currentSlide);
                         }
                     });
-            } else if (effect == "moveToBottom") {
+            } else if (effect == "moveToBottom"||effect == "moveToTop") {
                 $currentSlide.animate(
                     {
-                        "top": slider._height
+                        "top": (effect == "moveToBottom") ? slider._height : -slider._height
                     },
                     {
                         "duration": slider.options.duration,
@@ -359,30 +313,10 @@
                     }
                 );
                 $nextSlide
-                    .css({"top": -slider._height, "left": 0})
-                    .animate(
-                    {
-                        "top": 0
-                    },
-                    {
-                        "duration": slider.options.duration,
-                        "easing": slider.options.easing,
-                        "complete": function() {
-                            hideSlides($currentSlide);
-                        }
-                    });
-            } else if (effect == "moveToTop") {
-                $currentSlide.animate(
-                    {
-                        "top": -slider._height
-                    },
-                    {
-                        "duration": slider.options.duration,
-                        "easing": slider.options.easing
-                    }
-                );
-                $nextSlide
-                    .css({"top": slider._height, "left": 0})
+                    .css({
+                        "top": (effect == "moveToBottom") ? -slider._height : slider._height,
+                        "left": 0
+                        })
                     .animate(
                     {
                         "top": 0
