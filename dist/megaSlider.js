@@ -52,7 +52,7 @@
         slider.goToPrevSlide = function(customEffect) {goToPrevSlide(customEffect); return this;};
         slider.goToSlide = function(slideNumber, customEffect) {goToSlide(slideNumber, customEffect); return this;};
         slider.getSlideNumber = function() {return currentSlide;};
-        slider.startAuto = function() {startAuto(); return this;};
+        slider.startAuto = function(effect) {startAuto(effect); return this;};
         slider.stopAuto = function() {stopAuto(); return this;};
         slider.update = function(options) { //change slider options
             slider.options = $.extend(slider.options, options);
@@ -221,9 +221,10 @@
         }
 
         //start autoplay
-        function startAuto() {
-            if (slider.auto) return;
-            slider.auto = setInterval(goToNextSlide, slider.options.pause);
+        function startAuto(effect) {
+            if (slider.auto) stopAuto(); //if auto is already started, stop it
+            if (typeof(effect) == "string") slider.auto = setInterval(function() {goToNextSlide(effect)}, slider.options.pause); //if effect is set use it
+                else slider.auto = setInterval(function() {goToNextSlide()}, slider.options.pause); //else just start auto with default options
         }
 
         //stop autoplay
