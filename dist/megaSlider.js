@@ -534,6 +534,55 @@
             hideSlides($currentSlide);
         }
 
+
+        //division on quads vanishing in different time
+        slider.effects.waveDiagonal = function() {
+            var $currentSlide = $slides.eq(currentSlide),
+                $nextSlide = $slides.eq(nextSlide);
+            for (i=0;i<slider.options.horizontalBlocks;i++) {
+                for (j=0;j<slider.options.verticalBlocks;j++) {
+                    var $clone = $currentSlide.clone()
+                            .appendTo($slidesWrap)
+                            .wrap("<div></div>"),
+
+                    //added wrap to a variable
+                        $parent = $clone.parent();
+                    $clone.css({
+                        "left": -Math.ceil(slider._width/slider.options.horizontalBlocks)*i + "px",
+                        "top": -Math.ceil(slider._height/slider.options.verticalBlocks)*j + "px",
+                        "width": $currentSlide.width(),
+                        "height": $currentSlide.height(),
+                        "max-width": "none"
+                    });
+                    $parent.css({
+                        "left": Math.ceil(slider._width/slider.options.horizontalBlocks)*i + "px",
+                        "top": Math.ceil(slider._height/slider.options.verticalBlocks)*j + "px",
+                        "width": Math.ceil(slider._width/slider.options.horizontalBlocks) + "px",
+                        "height": Math.ceil(slider._height/slider.options.verticalBlocks) + "px",
+                        "position": "absolute",
+                        "z-index": 2,
+                        "overflow": "hidden"
+                    });
+                    (function($parent, i, j){
+                        setTimeout(function() {
+                           $parent.animate({
+                               "opacity": 0
+                           }, {
+                               "duration": slider.options.duration*(1 - i*j/(slider.options.horizontalBlocks*slider.options.verticalBlocks)),
+                               "easing": "linear",
+                               "complete": function() {
+                                   $(this).remove();
+                               }
+                           });
+                        }, i*j/(slider.options.horizontalBlocks*slider.options.verticalBlocks)*slider.options.duration);
+                    }($parent, i, j));
+                }
+            }
+            //show next slide, hide previous
+            $nextSlide.css("left", 0);
+            hideSlides($currentSlide);
+        };
+
         return this;
     }
 }(jQuery));
