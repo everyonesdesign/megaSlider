@@ -535,8 +535,10 @@
         }
 
 
-        //division on quads vanishing in different time
-        slider.effects.waveDiagonal = function() {
+
+
+        //wave diagonally
+        function waveDiagonalEffects() {
             var $currentSlide = $slides.eq(currentSlide),
                 $nextSlide = $slides.eq(nextSlide);
             for (i=0;i<slider.options.horizontalBlocks;i++) {
@@ -568,20 +570,20 @@
                            $parent.animate({
                                "opacity": 0
                            }, {
-                               "duration": slider.options.duration*(1 - i*j/(slider.options.horizontalBlocks*slider.options.verticalBlocks)),
+                               "duration": i+j/(slider.options.horizontalBlocks+slider.options.verticalBlocks)*slider.options.duration,
                                "easing": "linear",
                                "complete": function() {
                                    $(this).remove();
                                }
                            });
-                        }, i*j/(slider.options.horizontalBlocks*slider.options.verticalBlocks)*slider.options.duration);
+                        }, (i+j)/(slider.options.horizontalBlocks+slider.options.verticalBlocks)*slider.options.duration);
                     }($parent, i, j));
                 }
             }
             //show next slide, hide previous
             $nextSlide.css("left", 0);
             hideSlides($currentSlide);
-        };
+        }
 
         return this;
     }
