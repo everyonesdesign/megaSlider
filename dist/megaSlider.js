@@ -128,7 +128,11 @@
             if (customEffect) effect = customEffect; //if argument effect is set, use it (NOTE: it has highest priority)
             if (typeof(slider.effects[effect]) === "function") slider.effects[effect](); //if effect if defined execute it
             else console.error("The specified effect \"" + effect + "\" is missing"); //else error
-            slider.options.afterSlide(nextSlide); //callback
+            setTimeout(function() { //execute after trantition ends
+                isSliderAnimated = false;
+                setNewSlidesNumbers();
+                slider.options.afterSlide(nextSlide); //callback
+            }, slider.options.duration);
         }
 
         //go to prev slide. works by setting next slide lower than current one by 1
@@ -255,62 +259,12 @@
 
         //move to right
         slider.effects.moveToRight = function() {
-            var $currentSlide = $slides.eq(currentSlide),
-                $nextSlide = $slides.eq(nextSlide);
-            $currentSlide.animate(
-                {
-                    "left": slider._width
-                },
-                {
-                    "duration": slider.options.duration,
-                    "easing": slider.options.easing
-                }
-            );
-            $nextSlide
-                .css("left", -slider._width)
-                .animate(
-                {
-                    "left": 0
-                },
-                {
-                    "duration": slider.options.duration,
-                    "easing": slider.options.easing,
-                    "complete": function() {
-                        hideSlides($currentSlide);
-                        setNewSlidesNumbers();
-                        isSliderAnimated = false;
-                    }
-                });
+            moveEffects("moveToRight");
         };
 
         //move to left
         slider.effects.moveToLeft = function() {
-            var $currentSlide = $slides.eq(currentSlide),
-                $nextSlide = $slides.eq(nextSlide);
-            $currentSlide.animate(
-                {
-                    "left": -slider._width
-                },
-                {
-                    "duration": slider.options.duration,
-                    "easing": slider.options.easing
-                }
-            );
-            $nextSlide
-                .css("left", slider._width)
-                .animate(
-                {
-                    "left": 0
-                },
-                {
-                    "duration": slider.options.duration,
-                    "easing": slider.options.easing,
-                    "complete": function() {
-                        hideSlides($currentSlide);
-                        setNewSlidesNumbers();
-                        isSliderAnimated = false;
-                    }
-                });
+            moveEffects("moveToLeft");
         };
 
         //move to bottom
@@ -337,8 +291,6 @@
                     "easing": slider.options.easing,
                     "complete": function() {
                         hideSlides($currentSlide);
-                        setNewSlidesNumbers();
-                        isSliderAnimated = false;
                     }
                 });
         };
@@ -367,11 +319,86 @@
                     "easing": slider.options.easing,
                     "complete": function() {
                         hideSlides($currentSlide);
-                        setNewSlidesNumbers();
-                        isSliderAnimated = false;
                     }
                 });
         };
+
+
+        function moveEffects(effect) {
+            var $currentSlide = $slides.eq(currentSlide),
+                $nextSlide = $slides.eq(nextSlide);
+            if (effect == "moveToRight"||effect == "moveToLeft") {
+                $currentSlide.animate(
+                    {"left": (effect == "moveToRight") ? slider._width : -slider._width},
+                    {
+                        "duration": slider.options.duration,
+                        "easing": slider.options.easing
+                    }
+                );
+                $nextSlide
+                    .css("left", (effect == "moveToRight") ? -slider._width : slider._width)
+                    .animate(
+                    {
+                        "left": 0
+                    },
+                    {
+                        "duration": slider.options.duration,
+                        "easing": slider.options.easing,
+                        "complete": function() {
+                            hideSlides($currentSlide);
+                        }
+                    });
+            } else if (effect == "moveToBottom") {
+                $currentSlide.animate(
+                    {
+                        "top": slider._height
+                    },
+                    {
+                        "duration": slider.options.duration,
+                        "easing": slider.options.easing
+                    }
+                );
+                $nextSlide
+                    .css({"top": -slider._height, "left": 0})
+                    .animate(
+                    {
+                        "top": 0
+                    },
+                    {
+                        "duration": slider.options.duration,
+                        "easing": slider.options.easing,
+                        "complete": function() {
+                            hideSlides($currentSlide);
+                        }
+                    });
+            } else if (effect == "moveToTop") {
+                $currentSlide.animate(
+                    {
+                        "top": -slider._height
+                    },
+                    {
+                        "duration": slider.options.duration,
+                        "easing": slider.options.easing
+                    }
+                );
+                $nextSlide
+                    .css({"top": slider._height, "left": 0})
+                    .animate(
+                    {
+                        "top": 0
+                    },
+                    {
+                        "duration": slider.options.duration,
+                        "easing": slider.options.easing,
+                        "complete": function() {
+                            hideSlides($currentSlide);
+                        }
+                    });
+            }
+            setTimeout(function() {
+                hideSlides($currentSlide);
+            }, slider.options.duration);
+        }
 
         //move onto right
         slider.effects.moveOntoRight = function() {
@@ -389,8 +416,6 @@
                     "complete": function() {
                         hideSlides($currentSlide);
                         $nextSlide.css("z-index", "");
-                        setNewSlidesNumbers();
-                        isSliderAnimated = false;
                     }
                 });
         };
@@ -411,8 +436,6 @@
                     "complete": function() {
                         hideSlides($currentSlide);
                         $nextSlide.css("z-index", "");
-                        setNewSlidesNumbers();
-                        isSliderAnimated = false;
                     }
                 });
         };
@@ -433,8 +456,6 @@
                     "complete": function() {
                         hideSlides($currentSlide);
                         $nextSlide.css("z-index", "");
-                        setNewSlidesNumbers();
-                        isSliderAnimated = false;
                     }
                 });
         };
@@ -455,8 +476,6 @@
                     "complete": function() {
                         hideSlides($currentSlide);
                         $nextSlide.css("z-index", "");
-                        setNewSlidesNumbers();
-                        isSliderAnimated = false;
                     }
                 });
         };
@@ -478,8 +497,6 @@
                     "complete": function() {
                         hideSlides($currentSlide);
                         $nextSlide.css("z-index", "");
-                        setNewSlidesNumbers();
-                        isSliderAnimated = false;
                     }
                 });
         };
@@ -599,12 +616,6 @@
             //show next slide, hide previous
             $nextSlide.css("left", 0);
             hideSlides($currentSlide);
-
-            //end of transition
-            setTimeout(function() {
-                isSliderAnimated = false;
-                setNewSlidesNumbers();
-            }, slider.options.duration)
         }
 
         return this;
