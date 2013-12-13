@@ -334,85 +334,67 @@
             }, slider.options.duration);
         }
 
+
+
+
         //move onto right
         slider.effects.moveOntoRight = function() {
-            var $currentSlide = $slides.eq(currentSlide),
-                $nextSlide = $slides.eq(nextSlide);
-            $nextSlide
-                .css({"left": -slider._width, "z-index": 1})
-                .animate(
-                {
-                    "left": 0
-                },
-                {
-                    "duration": slider.options.duration,
-                    "easing": slider.options.easing,
-                    "complete": function() {
-                        hideSlides($currentSlide);
-                        $nextSlide.css("z-index", "");
-                    }
-                });
+            moveOntoEffects("moveOntoRight");
         };
 
         //move onto left
         slider.effects.moveOntoLeft = function() {
-            var $currentSlide = $slides.eq(currentSlide),
-                $nextSlide = $slides.eq(nextSlide);
-            $nextSlide
-                .css({"left": slider._width, "z-index": 1})
-                .animate(
-                {
-                    "left": 0
-                },
-                {
-                    "duration": slider.options.duration,
-                    "easing": slider.options.easing,
-                    "complete": function() {
-                        hideSlides($currentSlide);
-                        $nextSlide.css("z-index", "");
-                    }
-                });
+            moveOntoEffects("moveOntoLeft");
         };
 
         //move onto bottom
         slider.effects.moveOntoBottom = function() {
-            var $currentSlide = $slides.eq(currentSlide),
-                $nextSlide = $slides.eq(nextSlide);
-            $nextSlide
-                .css({"top": -slider._height, "left": 0, "z-index": 1})
-                .animate(
-                {
-                    "top": 0
-                },
-                {
-                    "duration": slider.options.duration,
-                    "easing": slider.options.easing,
-                    "complete": function() {
-                        hideSlides($currentSlide);
-                        $nextSlide.css("z-index", "");
-                    }
-                });
+            moveOntoEffects("moveOntoBottom");
         };
 
         //move onto top
         slider.effects.moveOntoTop = function() {
+            moveOntoEffects("moveOntoTop");
+        };
+
+        //moveOnto general function
+        function moveOntoEffects(effect) {
             var $currentSlide = $slides.eq(currentSlide),
                 $nextSlide = $slides.eq(nextSlide);
-            $nextSlide
-                .css({"top": slider._height, "left": 0, "z-index": 1})
-                .animate(
-                {
-                    "top": 0
-                },
-                {
-                    "duration": slider.options.duration,
-                    "easing": slider.options.easing,
-                    "complete": function() {
-                        hideSlides($currentSlide);
-                        $nextSlide.css("z-index", "");
-                    }
-                });
-        };
+            if (effect == "moveOntoRight"||effect == "moveOntoLeft") {
+                $nextSlide
+                    .css({"left": (effect == "moveOntoRight") ? -slider._width : slider._width, "z-index": 1})
+                    .animate(
+                    {
+                        "left": 0
+                    },
+                    {
+                        "duration": slider.options.duration,
+                        "easing": slider.options.easing,
+                        "complete": function() {
+                            hideSlides($currentSlide);
+                            $nextSlide.css("z-index", "");
+                        }
+                    });
+            } else if (effect == "moveOntoBottom"||effect == "moveOntoTop") {
+                $nextSlide
+                    .css({"top": (effect == "moveOntoBottom") ? -slider._height : slider._height, "left": 0, "z-index": 1})
+                    .animate(
+                    {
+                        "top": 0
+                    },
+                    {
+                        "duration": slider.options.duration,
+                        "easing": slider.options.easing,
+                        "complete": function() {
+                            hideSlides($currentSlide);
+                            $nextSlide.css("z-index", "");
+                        }
+                    });
+            }
+
+        }
+
 
         //fade
         slider.effects.fade = function() {
