@@ -605,13 +605,13 @@
                            $parent.animate({
                                "opacity": 0
                            }, {
-                               "duration": i+j/(slider.options.horizontalBlocks+slider.options.verticalBlocks)*slider.options.duration,
+                               "duration": (i+j)/(slider.options.horizontalBlocks+slider.options.verticalBlocks)*slider.options.duration,
                                "easing": "linear",
                                "complete": function() {
                                    $(this).remove();
                                }
                            });
-                        }, (i+j)/(slider.options.horizontalBlocks+slider.options.verticalBlocks)*slider.options.duration);
+                        }, (i+j)/2/(slider.options.horizontalBlocks+slider.options.verticalBlocks)*slider.options.duration);
                     }($parent, i, j));
                 }
             }
