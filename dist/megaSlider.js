@@ -553,7 +553,7 @@
         };
 
         //wave diagonally general function
-        function waveDiagonalEffects() {
+        function waveDiagonalEffects(effect) {
             var $currentSlide = $slides.eq(currentSlide),
                 $nextSlide = $slides.eq(nextSlide);
             for (var i=0;i<slider.options.horizontalBlocks;i++) {
@@ -565,15 +565,35 @@
                         //added wrap to a variable
                         $parent = $clone.parent();
                     $clone.css({
-                        "left": -Math.ceil(slider._width/slider.options.horizontalBlocks)*i + "px",
-                        "top": -Math.ceil(slider._height/slider.options.verticalBlocks)*j + "px",
+                        "left": (effect == "waveBottomRight"||effect == "waveTopRight") ?
+                            -Math.ceil(slider._width/slider.options.horizontalBlocks)*i + "px":
+                            "auto",
+                        "right": (effect == "waveBottomRight"||effect == "waveTopRight") ?
+                            "auto" :
+                            -Math.ceil(slider._width/slider.options.horizontalBlocks)*i + "px",
+                        "top": (effect == "waveBottomRight"||effect == "waveBottomLeft") ?
+                            -Math.ceil(slider._height/slider.options.verticalBlocks)*j + "px":
+                            "auto",
+                        "bottom": (effect == "waveBottomRight"||effect == "waveBottomLeft") ?
+                            "auto":
+                            -Math.ceil(slider._height/slider.options.verticalBlocks)*j + "px",
                         "width": $currentSlide.width(),
                         "height": $currentSlide.height(),
                         "max-width": "none"
                     });
                     $parent.css({
-                        "left": Math.ceil(slider._width/slider.options.horizontalBlocks)*i + "px",
-                        "top": Math.ceil(slider._height/slider.options.verticalBlocks)*j + "px",
+                        "left": (effect == "waveBottomRight"||effect == "waveTopRight") ?
+                            Math.ceil(slider._width/slider.options.horizontalBlocks)*i + "px":
+                            "auto",
+                        "right": (effect == "waveBottomRight"||effect == "waveTopRight") ?
+                            "auto":
+                            Math.ceil(slider._width/slider.options.horizontalBlocks)*i + "px",
+                        "top": (effect == "waveBottomRight"||effect == "waveBottomLeft") ?
+                            Math.ceil(slider._height/slider.options.verticalBlocks)*j + "px":
+                            "auto",
+                        "bottom": (effect == "waveBottomRight"||effect == "waveBottomLeft") ?
+                            "auto":
+                            Math.ceil(slider._height/slider.options.verticalBlocks)*j + "px",
                         "width": Math.ceil(slider._width/slider.options.horizontalBlocks) + "px",
                         "height": Math.ceil(slider._height/slider.options.verticalBlocks) + "px",
                         "position": "absolute",
