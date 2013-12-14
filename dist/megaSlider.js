@@ -1,4 +1,5 @@
 //TODO add effects, controls, pagination, previews, autoheight
+//TODO check ie7,8 opacity compatibility
 ;
 (function($) {
     $.fn.megaSlider = function(options) {
