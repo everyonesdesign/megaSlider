@@ -473,36 +473,20 @@
                     "max-height": "none"
                 });
 
-                //depending on effect set corrections
-                if (effect == "waveRight") {
-                    $parent.css({
-                        "top": 0,
-                        "left": i*blockMetrics + "px",
-                        "height": "100%",
-                        "width": Math.ceil(slider._width/blocksNumber) + "px"
-                    });
-                } else if (effect == "waveLeft") {
-                    $parent.css({
-                        "top": 0,
-                        "right": i*blockMetrics + "px",
-                        "height": "100%",
-                        "width": Math.ceil(slider._width/blocksNumber) + "px"
-                    });
-                } else if (effect == "waveBottom") {
-                    $parent.css({
-                        "left": 0,
-                        "top": i*blockMetrics + "px",
-                        "width": "100%",
-                        "height": Math.ceil(slider._height/blocksNumber) + "px"
-                    });
-                } else if (effect == "waveTop") {
-                    $parent.css({
-                        "left": 0,
-                        "bottom": i*blockMetrics + "px",
-                        "width": "100%",
-                        "height": Math.ceil(slider._height/blocksNumber) + "px"
-                    });
-                }
+                $parent.css({
+                    "left": (effect == "waveRight") ?
+                        i*blockMetrics + "px" :
+                        (effect == "waveLeft") ?
+                            "" : 0,
+                    "right": (effect == "waveLeft") ? i*blockMetrics + "px" : "auto",
+                    "top": (effect == "waveBottom") ?
+                        i*blockMetrics + "px" :
+                        (effect == "waveTop") ?
+                            "" : "auto",
+                    "bottom": (effect == "waveTop") ? i*blockMetrics + "px" : "auto",
+                    "width": (effect == "waveRight"||effect == "waveLeft") ? Math.ceil(slider._width/blocksNumber) + "px" : "100%",
+                    "height": (effect == "waveBottom"||effect == "waveTop") ? Math.ceil(slider._height/blocksNumber) + "px" : "100%"
+                });
 
                 //wrap basic styles and animation
                 $parent
