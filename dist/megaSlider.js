@@ -462,6 +462,7 @@
                     //added wrap to a variable
                     $parent = $clone.parent();
 
+                //clone style
                 $clone.css({
                     "left": (effect == "waveRight") ? -blockMetrics*i + "px" : "auto",
                     "right": (effect == "waveLeft") ? -blockMetrics*i + "px" : "auto",
@@ -473,7 +474,11 @@
                     "max-height": "none"
                 });
 
+                //wrap styles and animation
                 $parent.css({
+                    "position": "absolute",
+                    "z-index": 2,
+                    "overflow": "hidden",
                     "left": (effect == "waveRight") ?
                         i*blockMetrics + "px" :
                         (effect == "waveLeft") ?
@@ -486,14 +491,6 @@
                     "bottom": (effect == "waveTop") ? i*blockMetrics + "px" : "auto",
                     "width": (effect == "waveRight"||effect == "waveLeft") ? Math.ceil(slider._width/blocksNumber) + "px" : "100%",
                     "height": (effect == "waveBottom"||effect == "waveTop") ? Math.ceil(slider._height/blocksNumber) + "px" : "100%"
-                });
-
-                //wrap basic styles and animation
-                $parent
-                    .css({
-                    "position": "absolute",
-                    "z-index": 2,
-                    "overflow": "hidden"
                 }).animate({
                     "opacity": 0
                 }, {
