@@ -462,13 +462,19 @@
                     //added wrap to a variable
                     $parent = $clone.parent();
 
+                $clone.css({
+                    "left": (effect == "waveRight") ? -blockMetrics*i + "px" : "auto",
+                    "right": (effect == "waveLeft") ? -blockMetrics*i + "px" : "auto",
+                    "top": (effect == "waveBottom") ? -blockMetrics*i + "px" : "auto",
+                    "bottom": (effect == "waveTop") ? -blockMetrics*i + "px" : "auto",
+                    "width": (effect == "waveRight"||effect == "waveLeft") ? $currentSlide.width() : "",
+                    "height": (effect == "waveBottom"||effect == "waveTop") ? $currentSlide.height() : "",
+                    "max-width": "none",
+                    "max-height": "none"
+                });
+
                 //depending on effect set corrections
                 if (effect == "waveRight") {
-                    $clone.css({
-                        "left": -blockMetrics*i + "px",
-                        "width": $currentSlide.width(),
-                        "max-width": "none"
-                    });
                     $parent.css({
                         "top": 0,
                         "left": i*blockMetrics + "px",
@@ -476,12 +482,6 @@
                         "width": Math.ceil(slider._width/blocksNumber) + "px"
                     });
                 } else if (effect == "waveLeft") {
-                    $clone.css({
-                        "right": -blockMetrics*i + "px",
-                        "left": "auto",
-                        "width": $currentSlide.width(),
-                        "max-width": "none"
-                    });
                     $parent.css({
                         "top": 0,
                         "right": i*blockMetrics + "px",
@@ -489,10 +489,6 @@
                         "width": Math.ceil(slider._width/blocksNumber) + "px"
                     });
                 } else if (effect == "waveBottom") {
-                    $clone.css({
-                        "top": -blockMetrics*i + "px",
-                        "height": $currentSlide.height()
-                    });
                     $parent.css({
                         "left": 0,
                         "top": i*blockMetrics + "px",
@@ -500,11 +496,6 @@
                         "height": Math.ceil(slider._height/blocksNumber) + "px"
                     });
                 } else if (effect == "waveTop") {
-                    $clone.css({
-                        "bottom": -blockMetrics*i + "px",
-                        "top": "auto",
-                        "height": $currentSlide.height()
-                    });
                     $parent.css({
                         "left": 0,
                         "bottom": i*blockMetrics + "px",
