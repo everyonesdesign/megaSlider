@@ -556,13 +556,13 @@
         function waveDiagonalEffects() {
             var $currentSlide = $slides.eq(currentSlide),
                 $nextSlide = $slides.eq(nextSlide);
-            for (i=0;i<slider.options.horizontalBlocks;i++) {
-                for (j=0;j<slider.options.verticalBlocks;j++) {
+            for (var i=0;i<slider.options.horizontalBlocks;i++) {
+                for (var j=0;j<slider.options.verticalBlocks;j++) {
                     var $clone = $currentSlide.clone()
                             .appendTo($slidesWrap)
                             .wrap("<div></div>"),
 
-                    //added wrap to a variable
+                        //added wrap to a variable
                         $parent = $clone.parent();
                     $clone.css({
                         "left": -Math.ceil(slider._width/slider.options.horizontalBlocks)*i + "px",
