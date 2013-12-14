@@ -105,7 +105,7 @@
                 effectsMax,
                 randomEffectNumber;
             if (slider.options.effects === "all") {
-                $.each(slider.effects, function(index, value) {
+                $.each(slider.effects, function(index) {
                     effectsArray.push(index);
                 });
             } else {
@@ -259,38 +259,38 @@
 
         //move to right
         slider.effects.moveRight = function() {
-            moveEffects("moveToRight");
+            moveEffects("moveRight");
         };
 
         //move to left
         slider.effects.moveLeft = function() {
-            moveEffects("moveToLeft");
+            moveEffects("moveLeft");
         };
 
         //move to bottom
         slider.effects.moveBottom = function() {
-            moveEffects("moveToBottom");
+            moveEffects("moveBottom");
         };
 
         //move to top
         slider.effects.moveTop = function() {
-            moveEffects("moveToTop");
+            moveEffects("moveTop");
         };
 
 
         function moveEffects(effect) {
             var $currentSlide = $slides.eq(currentSlide),
                 $nextSlide = $slides.eq(nextSlide);
-            if (effect == "moveToRight"||effect == "moveToLeft") {
+            if (effect == "moveRight"||effect == "moveLeft") {
                 $currentSlide.animate(
-                    {"left": (effect == "moveToRight") ? slider._width : -slider._width},
+                    {"left": (effect == "moveRight") ? slider._width : -slider._width},
                     {
                         "duration": slider.options.duration,
                         "easing": slider.options.easing
                     }
                 );
                 $nextSlide
-                    .css("left", (effect == "moveToRight") ? -slider._width : slider._width)
+                    .css("left", (effect == "moveRight") ? -slider._width : slider._width)
                     .animate(
                     {
                         "left": 0
@@ -302,10 +302,10 @@
                             hideSlides($currentSlide);
                         }
                     });
-            } else if (effect == "moveToBottom"||effect == "moveToTop") {
+            } else if (effect == "moveBottom"||effect == "moveTop") {
                 $currentSlide.animate(
                     {
-                        "top": (effect == "moveToBottom") ? slider._height : -slider._height
+                        "top": (effect == "moveBottom") ? slider._height : -slider._height
                     },
                     {
                         "duration": slider.options.duration,
@@ -314,7 +314,7 @@
                 );
                 $nextSlide
                     .css({
-                        "top": (effect == "moveToBottom") ? -slider._height : slider._height,
+                        "top": (effect == "moveBottom") ? -slider._height : slider._height,
                         "left": 0
                         })
                     .animate(
@@ -419,22 +419,22 @@
 
         //wave right
         slider.effects.waveRight = function() {
-            waveEffects("waveToRight");
+            waveEffects("waveRight");
         };
 
         //wave left
         slider.effects.waveLeft = function() {
-            waveEffects("waveToLeft");
+            waveEffects("waveLeft");
         };
 
         //wave bottom
         slider.effects.waveBottom = function() {
-            waveEffects("waveToBottom");
+            waveEffects("waveBottom");
         };
 
         //wave top
         slider.effects.waveTop = function() {
-            waveEffects("waveToTop");
+            waveEffects("waveTop");
         };
 
         //general wave effects function
@@ -443,7 +443,7 @@
                 $nextSlide = $slides.eq(nextSlide),
                 blocksNumber,
                 blockMetrics;
-            if (effect=="waveToRight"||effect=="waveToLeft")  {//horizontal transitions
+            if (effect=="waveRight"||effect=="waveLeft")  {//horizontal transitions
                 blocksNumber = slider.options.horizontalBlocks;
                 blockMetrics = Math.ceil(slider._width/blocksNumber);
             }   else {                                        //vertical transitions
@@ -463,7 +463,7 @@
                     $parent = $clone.parent();
 
                 //depending on effect set corrections
-                if (effect == "waveToRight") {
+                if (effect == "waveRight") {
                     $clone.css({
                         "left": -blockMetrics*i + "px",
                         "width": $currentSlide.width(),
@@ -475,7 +475,7 @@
                         "height": "100%",
                         "width": Math.ceil(slider._width/blocksNumber) + "px"
                     });
-                } else if (effect == "waveToLeft") {
+                } else if (effect == "waveLeft") {
                     $clone.css({
                         "right": -blockMetrics*i + "px",
                         "left": "auto",
@@ -488,7 +488,7 @@
                         "height": "100%",
                         "width": Math.ceil(slider._width/blocksNumber) + "px"
                     });
-                } else if (effect == "waveToBottom") {
+                } else if (effect == "waveBottom") {
                     $clone.css({
                         "top": -blockMetrics*i + "px",
                         "height": $currentSlide.height()
@@ -499,7 +499,7 @@
                         "width": "100%",
                         "height": Math.ceil(slider._height/blocksNumber) + "px"
                     });
-                } else if (effect == "waveToTop") {
+                } else if (effect == "waveTop") {
                     $clone.css({
                         "bottom": -blockMetrics*i + "px",
                         "top": "auto",
