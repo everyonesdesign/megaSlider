@@ -508,6 +508,97 @@
         }
 
 
+        //fold right
+        slider.effects.foldRight = function() {
+            foldEffects("foldRight");
+        };
+
+        //fold left
+        slider.effects.foldLeft = function() {
+            foldEffects("foldLeft");
+        };
+
+        //fold bottom
+        slider.effects.foldBottom = function() {
+            foldEffects("foldBottom");
+        };
+
+        //fold top
+        slider.effects.foldTop = function() {
+            foldEffects("foldTop");
+        };
+
+        //general fold effects function
+        function foldEffects(effect) {
+            var $currentSlide = $slides.eq(currentSlide),
+                $nextSlide = $slides.eq(nextSlide),
+                blocksNumber,
+                blockMetrics;
+            if (effect=="foldRight"||effect=="foldLeft")  {//horizontal transitions
+                blocksNumber = slider.options.horizontalBlocks;
+                blockMetrics = Math.ceil(slider._width/blocksNumber);
+            }   else {                                        //vertical transitions
+                blocksNumber = slider.options.verticalBlocks;
+                blockMetrics = Math.ceil(slider._height/blocksNumber);
+            }
+
+            //creating blocks for fold
+            for (var i=0; i<blocksNumber; i++) {
+
+                //creating clone of current slide, insert it and set its width to be equal with original one
+                var $clone = $currentSlide.clone()
+                    .appendTo($slidesWrap)
+                    .wrap("<div></div>"),
+
+                    //added wrap to a variable
+                    $parent = $clone.parent();
+
+                //clone style
+                $clone.css({
+                    "left": (effect == "foldRight") ? -blockMetrics*i + "px" : "auto",
+                    "right": (effect == "foldLeft") ? -blockMetrics*i + "px" : "auto",
+                    "top": (effect == "foldBottom") ? -blockMetrics*i + "px" : "auto",
+                    "bottom": (effect == "foldTop") ? -blockMetrics*i + "px" : "auto",
+                    "width": (effect == "foldRight"||effect == "foldLeft") ? $currentSlide.width() : "",
+                    "height": (effect == "foldBottom"||effect == "foldTop") ? $currentSlide.height() : "",
+                    "max-width": "none",
+                    "max-height": "none"
+                });
+
+                //wrap styles and animation
+                $parent.css({
+                    "position": "absolute",
+                    "z-index": 2,
+                    "overflow": "hidden",
+                    "left": (effect == "foldRight") ?
+                        i*blockMetrics + "px" :
+                        (effect == "foldLeft") ?
+                            "" : 0,
+                    "right": (effect == "foldLeft") ? i*blockMetrics + "px" : "auto",
+                    "top": (effect == "foldBottom") ?
+                        i*blockMetrics + "px" :
+                        (effect == "foldTop") ?
+                            "" : "auto",
+                    "bottom": (effect == "foldTop") ? i*blockMetrics + "px" : "auto",
+                    "width": (effect == "foldRight"||effect == "foldLeft") ? Math.ceil(slider._width/blocksNumber) + "px" : "100%",
+                    "height": (effect == "foldBottom"||effect == "foldTop") ? Math.ceil(slider._height/blocksNumber) + "px" : "100%"
+                }).animate({
+                    "width": (effect == "foldRight"||effect == "foldLeft") ? 0 : "100%",
+                    "height": (effect == "foldTop"||effect == "foldBottom") ? 0 : "100%"
+                }, {
+                    "duration": slider.options.duration,
+                    "complete": function() {
+                        $(this).remove();
+                    }
+                });
+            }
+
+            //show next slide, hide previous
+            $nextSlide.css("left", 0);
+            hideSlides($currentSlide);
+        }
+
+
         //wave bottom right
         slider.effects.waveBottomRight = function() {
             waveDiagonalEffects("waveBottomRight");
