@@ -587,7 +587,7 @@
                                     $(this).remove();
                                 }
                             });
-                        }, (i+j)/2/(slider.options.horizontalBlocks+slider.options.verticalBlocks)*slider.options.duration);
+                        }, (i)/2/(slider.options.horizontalBlocks+slider.options.verticalBlocks)*slider.options.duration);
                     }($parent, i, j));
                 }
             }
@@ -674,15 +674,21 @@
                     "bottom": (effect == "foldTop") ? i*blockMetrics + "px" : "auto",
                     "width": (effect == "foldRight"||effect == "foldLeft") ? Math.ceil(slider._width/blocksNumber) + "px" : "100%",
                     "height": (effect == "foldBottom"||effect == "foldTop") ? Math.ceil(slider._height/blocksNumber) + "px" : "100%"
-                }).animate({
-                    "width": (effect == "foldRight"||effect == "foldLeft") ? 0 : "100%",
-                    "height": (effect == "foldTop"||effect == "foldBottom") ? 0 : "100%"
-                }, {
-                    "duration": slider.options.duration,
-                    "complete": function() {
-                        $(this).remove();
-                    }
                 });
+                (function($parent, i, effect){
+                    var durationCoef = 1/4; // means that last 1/4 of transition time is time when all the blocks are animated already
+                    setTimeout(function() {
+                        $parent.animate({
+                            "width": (effect == "foldRight"||effect == "foldLeft") ? 0 : "100%",
+                            "height": (effect == "foldTop"||effect == "foldBottom") ? 0 : "100%"
+                        }, {
+                            "duration": slider.options.duration*durationCoef,
+                            "complete": function() {
+                                $(this).remove();
+                            }
+                        });
+                    }, i*(1 - durationCoef)/blocksNumber*slider.options.duration);
+                }($parent, i, effect));
             }
 
             //show next slide, hide previous
@@ -795,10 +801,7 @@
                 }).animate({"opacity": 0}, 0); //cross-browser hide parent
                 $toRemove = $toRemove.add($parent);
                 (function($parent, i, effect){
-                        var blocksNumber = (effect == "sliceRight"||effect == "sliceLeft") ?
-                            slider.options.horizontalBlocks :
-                            slider.options.verticalBlocks,
-                            durationCoef = 1/4; // means that last 1/4 of transition time is time when all the blocks are animated already
+                    var durationCoef = 1/4; // means that last 1/4 of transition time is time when all the blocks are animated already
                     setTimeout(function() {
                         $parent.animate({
                             "left": (effect == "sliceTop"||effect == "sliceBottom") ? 0 : $parent.css("left"),
