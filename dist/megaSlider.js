@@ -508,6 +508,98 @@
         }
 
 
+        
+        
+
+        //wave bottom right
+        slider.effects.waveBottomRight = function() {
+            waveDiagonalEffects("waveBottomRight");
+        };
+        //wave bottom left
+        slider.effects.waveBottomLeft = function() {
+            waveDiagonalEffects("waveBottomLeft");
+        };
+        //wave top right
+        slider.effects.waveTopRight = function() {
+            waveDiagonalEffects("waveTopRight");
+        };
+        //wave top left
+        slider.effects.waveTopLeft = function() {
+            waveDiagonalEffects("waveTopLeft");
+        };
+
+        //wave diagonally general function
+        function waveDiagonalEffects(effect) {
+            var $currentSlide = $slides.eq(currentSlide),
+                $nextSlide = $slides.eq(nextSlide);
+            for (var i=0;i<slider.options.horizontalBlocks;i++) {
+                for (var j=0;j<slider.options.verticalBlocks;j++) {
+                    var $clone = $currentSlide.clone()
+                            .appendTo($slidesWrap)
+                            .wrap("<div></div>"),
+
+                    //added wrap to a variable
+                        $parent = $clone.parent();
+                    $clone.css({
+                        "left": (effect == "waveBottomRight"||effect == "waveTopRight") ?
+                            -Math.ceil(slider._width/slider.options.horizontalBlocks)*i + "px":
+                            "auto",
+                        "right": (effect == "waveBottomRight"||effect == "waveTopRight") ?
+                            "auto" :
+                            -Math.ceil(slider._width/slider.options.horizontalBlocks)*i + "px",
+                        "top": (effect == "waveBottomRight"||effect == "waveBottomLeft") ?
+                            -Math.ceil(slider._height/slider.options.verticalBlocks)*j + "px":
+                            "auto",
+                        "bottom": (effect == "waveBottomRight"||effect == "waveBottomLeft") ?
+                            "auto":
+                            -Math.ceil(slider._height/slider.options.verticalBlocks)*j + "px",
+                        "width": $currentSlide.width(),
+                        "height": $currentSlide.height(),
+                        "max-width": "none"
+                    });
+                    $parent.css({
+                        "left": (effect == "waveBottomRight"||effect == "waveTopRight") ?
+                            Math.ceil(slider._width/slider.options.horizontalBlocks)*i + "px":
+                            "auto",
+                        "right": (effect == "waveBottomRight"||effect == "waveTopRight") ?
+                            "auto":
+                            Math.ceil(slider._width/slider.options.horizontalBlocks)*i + "px",
+                        "top": (effect == "waveBottomRight"||effect == "waveBottomLeft") ?
+                            Math.ceil(slider._height/slider.options.verticalBlocks)*j + "px":
+                            "auto",
+                        "bottom": (effect == "waveBottomRight"||effect == "waveBottomLeft") ?
+                            "auto":
+                            Math.ceil(slider._height/slider.options.verticalBlocks)*j + "px",
+                        "width": Math.ceil(slider._width/slider.options.horizontalBlocks) + "px",
+                        "height": Math.ceil(slider._height/slider.options.verticalBlocks) + "px",
+                        "position": "absolute",
+                        "z-index": 2,
+                        "overflow": "hidden"
+                    });
+                    (function($parent, i, j){
+                        setTimeout(function() {
+                            $parent.animate({
+                                "opacity": 0
+                            }, {
+                                "duration": (i+j)/(slider.options.horizontalBlocks+slider.options.verticalBlocks)*slider.options.duration,
+                                "easing": "linear",
+                                "complete": function() {
+                                    $(this).remove();
+                                }
+                            });
+                        }, (i+j)/2/(slider.options.horizontalBlocks+slider.options.verticalBlocks)*slider.options.duration);
+                    }($parent, i, j));
+                }
+            }
+            //show next slide, hide previous
+            $nextSlide.css("left", 0);
+            hideSlides($currentSlide);
+        }
+        
+        
+        
+
+
         //fold right
         slider.effects.foldRight = function() {
             foldEffects("foldRight");
@@ -599,90 +691,132 @@
         }
 
 
-        //wave bottom right
-        slider.effects.waveBottomRight = function() {
-            waveDiagonalEffects("waveBottomRight");
-        };
-        //wave bottom left
-        slider.effects.waveBottomLeft = function() {
-            waveDiagonalEffects("waveBottomLeft");
-        };
-        //wave top right
-        slider.effects.waveTopRight = function() {
-            waveDiagonalEffects("waveTopRight");
-        };
-        //wave top left
-        slider.effects.waveTopLeft = function() {
-            waveDiagonalEffects("waveTopLeft");
+
+
+
+
+        //slice right
+        slider.effects.sliceRight = function() {
+            sliceEffects("sliceRight");
         };
 
-        //wave diagonally general function
-        function waveDiagonalEffects(effect) {
+        //slice left
+        slider.effects.sliceLeft = function() {
+            sliceEffects("sliceLeft");
+        };
+
+        //slice bottom
+        slider.effects.sliceBottom = function() {
+            sliceEffects("sliceBottom");
+        };
+
+        //slice top
+        slider.effects.sliceTop = function() {
+            sliceEffects("sliceTop");
+        };
+
+        //crossSlice right
+        slider.effects.crossSliceRight = function() {
+            sliceEffects("sliceRight", true);
+        };
+
+        //crossSlice left
+        slider.effects.crossSliceLeft = function() {
+            sliceEffects("sliceLeft", true);
+        };
+
+        //crossSlice bottom
+        slider.effects.crossSliceBottom = function() {
+            sliceEffects("sliceBottom", true);
+        };
+
+        //crossSlice top
+        slider.effects.crossSliceTop = function() {
+            sliceEffects("sliceTop", true);
+        };
+
+        //general slice effects function
+        function sliceEffects(effect, crossSlice) {
             var $currentSlide = $slides.eq(currentSlide),
-                $nextSlide = $slides.eq(nextSlide);
-            for (var i=0;i<slider.options.horizontalBlocks;i++) {
-                for (var j=0;j<slider.options.verticalBlocks;j++) {
-                    var $clone = $currentSlide.clone()
-                            .appendTo($slidesWrap)
-                            .wrap("<div></div>"),
-
-                        //added wrap to a variable
-                        $parent = $clone.parent();
-                    $clone.css({
-                        "left": (effect == "waveBottomRight"||effect == "waveTopRight") ?
-                            -Math.ceil(slider._width/slider.options.horizontalBlocks)*i + "px":
-                            "auto",
-                        "right": (effect == "waveBottomRight"||effect == "waveTopRight") ?
-                            "auto" :
-                            -Math.ceil(slider._width/slider.options.horizontalBlocks)*i + "px",
-                        "top": (effect == "waveBottomRight"||effect == "waveBottomLeft") ?
-                            -Math.ceil(slider._height/slider.options.verticalBlocks)*j + "px":
-                            "auto",
-                        "bottom": (effect == "waveBottomRight"||effect == "waveBottomLeft") ?
-                            "auto":
-                            -Math.ceil(slider._height/slider.options.verticalBlocks)*j + "px",
-                        "width": $currentSlide.width(),
-                        "height": $currentSlide.height(),
-                        "max-width": "none"
-                    });
-                    $parent.css({
-                        "left": (effect == "waveBottomRight"||effect == "waveTopRight") ?
-                            Math.ceil(slider._width/slider.options.horizontalBlocks)*i + "px":
-                            "auto",
-                        "right": (effect == "waveBottomRight"||effect == "waveTopRight") ?
-                            "auto":
-                            Math.ceil(slider._width/slider.options.horizontalBlocks)*i + "px",
-                        "top": (effect == "waveBottomRight"||effect == "waveBottomLeft") ?
-                            Math.ceil(slider._height/slider.options.verticalBlocks)*j + "px":
-                            "auto",
-                        "bottom": (effect == "waveBottomRight"||effect == "waveBottomLeft") ?
-                            "auto":
-                            Math.ceil(slider._height/slider.options.verticalBlocks)*j + "px",
-                        "width": Math.ceil(slider._width/slider.options.horizontalBlocks) + "px",
-                        "height": Math.ceil(slider._height/slider.options.verticalBlocks) + "px",
-                        "position": "absolute",
-                        "z-index": 2,
-                        "overflow": "hidden"
-                    });
-                    (function($parent, i, j){
-                        setTimeout(function() {
-                           $parent.animate({
-                               "opacity": 0
-                           }, {
-                               "duration": (i+j)/(slider.options.horizontalBlocks+slider.options.verticalBlocks)*slider.options.duration,
-                               "easing": "linear",
-                               "complete": function() {
-                                   $(this).remove();
-                               }
-                           });
-                        }, (i+j)/2/(slider.options.horizontalBlocks+slider.options.verticalBlocks)*slider.options.duration);
-                    }($parent, i, j));
-                }
+                $nextSlide = $slides.eq(nextSlide),
+                blocksNumber,
+                blockMetrics;
+            if (effect=="sliceRight"||effect=="sliceLeft")  {//horizontal transitions
+                blocksNumber = slider.options.horizontalBlocks;
+                blockMetrics = Math.ceil(slider._width/blocksNumber);
+            }   else {                                        //vertical transitions
+                blocksNumber = slider.options.verticalBlocks;
+                blockMetrics = Math.ceil(slider._height/blocksNumber);
             }
+
+            //creating blocks for slice
+            for (var i=0; i<blocksNumber; i++) {
+
+                //creating clone of current slide, insert it and set its width to be equal with original one
+                var $clone = $currentSlide.clone()
+                        .appendTo($slidesWrap)
+                        .wrap("<div></div>"),
+
+                //added wrap to a variable
+                    $parent = $clone.parent();
+
+                //clone style
+                $clone.css({
+                    "left": (effect == "sliceRight") ? -blockMetrics*i + "px" : "auto",
+                    "right": (effect == "sliceLeft") ? -blockMetrics*i + "px" : "auto",
+                    "top": (effect == "sliceBottom") ? -blockMetrics*i + "px" : "auto",
+                    "bottom": (effect == "sliceTop") ? -blockMetrics*i + "px" : "auto",
+                    "width": (effect == "sliceRight"||effect == "sliceLeft") ? $currentSlide.width() : "",
+                    "height": (effect == "sliceBottom"||effect == "sliceTop") ? $currentSlide.height() : "",
+                    "max-width": "none",
+                    "max-height": "none"
+                });
+
+                //wrap styles and animation
+                $parent.css({
+                    "position": "absolute",
+                    "z-index": 2,
+                    "overflow": "hidden",
+                    "left": (effect == "sliceRight") ?
+                        i*blockMetrics + "px" :
+                        (effect == "sliceLeft") ?
+                            "" : 0,
+                    "right": (effect == "sliceLeft") ? i*blockMetrics + "px" : "auto",
+                    "top": (effect == "sliceBottom") ?
+                        i*blockMetrics + "px" :
+                        (effect == "sliceTop") ?
+                            "" : "auto",
+                    "bottom": (effect == "sliceTop") ? i*blockMetrics + "px" : "auto",
+                    "width": (effect == "sliceRight"||effect == "sliceLeft") ? Math.ceil(slider._width/blocksNumber) + "px" : "100%",
+                    "height": (effect == "sliceBottom"||effect == "sliceTop") ? Math.ceil(slider._height/blocksNumber) + "px" : "100%"
+                });
+                (function($parent, i, effect, crossSlice){
+                    var crossMult = (i%2==1 && crossSlice) ? -1 : 1,
+                        blocksNumber = (effect == "sliceRight"||effect == "sliceLeft") ?
+                            slider.options.horizontalBlocks :
+                            slider.options.verticalBlocks;
+                    setTimeout(function() {
+                        $parent.animate({
+                            "left": (effect == "sliceTop"||effect == "sliceBottom") ? -slider._width*crossMult : $parent.css("left"),
+                            "top": (effect == "sliceLeft"||effect == "sliceRight") ? -slider._height*crossMult : $parent.css("top")
+                        }, {
+                            "duration": 1/blocksNumber*slider.options.duration,
+                            "easing": "linear",
+                            "complete": function() {
+                                $(this).remove();
+                            }
+                        });
+                    }, i/1.1/blocksNumber*slider.options.duration);
+                }($parent, i, effect, crossSlice));
+            }
+
             //show next slide, hide previous
             $nextSlide.css("left", 0);
             hideSlides($currentSlide);
         }
+
+
+
 
         return this;
     }
