@@ -1,4 +1,5 @@
-//TODO add effects, controls, pagination, previews, autoheight
+//TODO add effects, pagination, previews, autoheight
+//TODO rewrite gotonextslide effects arguments work
 //TODO check ie7,8 opacity compatibility
 ;
 (function($) {
@@ -30,6 +31,10 @@
             startSlide: 0, //number of init slide, zero-based
             reverse: false, //play in reverse direction
             responsive: true, //dynamically changes slider height
+            controls: true,
+            prevText: "Prev",
+            nextText: "Next",
+            pagination: true,
             //callbacks
             beforeSlide: function() {}, //executed just before transition. first argument is active slide number
             afterSlide: function() {}, //executed just after transition. first argument is active slide number
@@ -44,6 +49,12 @@
             isSliderAnimated = false,
             currentSlide,
             nextSlide;
+
+        slider.modules = {}; //all the connected additional modules (except for effects) are in this object
+        slider.modules.controls = true;
+        slider.modules.auto = true;
+
+
 
         //write options in slider object to be able to read/change them later
         slider.options = $.extend(defaults, options);
@@ -92,9 +103,15 @@
             //set slider width and height variables
             updateSliderWidthAndHeight();
 
+            //add controls
+            if (slider.modules.controls&&slider.options.controls) {
+                initSliderControls();
+            }
+
             //start auto
             if (slider.options.auto) startAuto();
             if (slider.options.stopAutoOnHover) $slider.hover(stopAuto, startAuto);
+
 
             //onload callback execution
             slider.options.onSliderLoad();
@@ -126,7 +143,7 @@
             var effect = generateEffectName(), //get effect from list
                 dataAttributeEffect = $slides.eq(nextSlide).data("effect");
             if (dataAttributeEffect) effect = dataAttributeEffect; //if attribute effect is set, use it
-            if (customEffect) effect = customEffect; //if argument effect is set, use it (NOTE: it has highest priority)
+            if (typeof(customEffect) == "string") effect = customEffect; //if argument effect is set, use it (NOTE: it has highest priority)
             if (typeof(slider.effects[effect]) === "function") slider.effects[effect](); //if effect if defined execute it
             else console.error("The specified effect \"" + effect + "\" is missing"); //else error
             setTimeout(function() { //execute after trantition ends
@@ -225,6 +242,7 @@
             }
         }
 
+
         //start autoplay
         function startAuto(effect) {
             if (slider.auto) stopAuto(); //if auto is already started, stop it
@@ -243,6 +261,8 @@
             $slide.css({"top": 0, "left": "-9999px", "z-index": ""});
         }
 
+        slider.modules.responsive = true;
+
         //responsive slider version
         makeSliderResponsive();
         function makeSliderResponsive() {
@@ -251,6 +271,18 @@
                 updateSliderWidthAndHeight();
                 setSliderHeight();
             });
+        }
+
+
+
+        function initSliderControls() {
+            var container = "<div class='megaSlider-controls'></div>",
+                arrow = "<a href='javascript:;' class='megaSlider-control'></a>",
+                $prev,
+                $next;
+            $prev = $(arrow).clone().addClass("prev").text(slider.options.prevText).click(goToNextSlide);
+            $next = $(arrow).clone().addClass("next").text(slider.options.nextText).click(goToPrevSlide);
+            $(container).append($prev).append($next).appendTo($slider);
         }
 
 
@@ -595,8 +627,94 @@
             $nextSlide.css("left", 0);
             hideSlides($currentSlide);
         }
-        
-        
+
+
+
+        //fold bottom right
+        slider.effects.foldBottomRight = function() {
+            foldDiagonalEffects("foldBottomRight");
+        };
+        //fold bottom left
+        slider.effects.foldBottomLeft = function() {
+            foldDiagonalEffects("foldBottomLeft");
+        };
+        //fold top right
+        slider.effects.foldTopRight = function() {
+            foldDiagonalEffects("foldTopRight");
+        };
+        //fold top left
+        slider.effects.foldTopLeft = function() {
+            foldDiagonalEffects("foldTopLeft");
+        };
+
+        //fold diagonally general function
+        function foldDiagonalEffects(effect) {
+            var $currentSlide = $slides.eq(currentSlide),
+                $nextSlide = $slides.eq(nextSlide);
+            for (var i=0;i<slider.options.horizontalBlocks;i++) {
+                for (var j=0;j<slider.options.verticalBlocks;j++) {
+                    var $clone = $currentSlide.clone()
+                            .appendTo($slidesWrap)
+                            .wrap("<div></div>"),
+
+                    //added wrap to a variable
+                        $parent = $clone.parent();
+                    $clone.css({
+                        "left": (effect == "foldBottomRight"||effect == "foldTopRight") ?
+                            -Math.ceil(slider._width/slider.options.horizontalBlocks)*i + "px":
+                            "auto",
+                        "right": (effect == "foldBottomRight"||effect == "foldTopRight") ?
+                            "auto" :
+                            -Math.ceil(slider._width/slider.options.horizontalBlocks)*i + "px",
+                        "top": (effect == "foldBottomRight"||effect == "foldBottomLeft") ?
+                            -Math.ceil(slider._height/slider.options.verticalBlocks)*j + "px":
+                            "auto",
+                        "bottom": (effect == "foldBottomRight"||effect == "foldBottomLeft") ?
+                            "auto":
+                            -Math.ceil(slider._height/slider.options.verticalBlocks)*j + "px",
+                        "width": $currentSlide.width(),
+                        "height": $currentSlide.height(),
+                        "max-width": "none"
+                    });
+                    $parent.css({
+                        "left": (effect == "foldBottomRight"||effect == "foldTopRight") ?
+                            Math.ceil(slider._width/slider.options.horizontalBlocks)*i + "px":
+                            "auto",
+                        "right": (effect == "foldBottomRight"||effect == "foldTopRight") ?
+                            "auto":
+                            Math.ceil(slider._width/slider.options.horizontalBlocks)*i + "px",
+                        "top": (effect == "foldBottomRight"||effect == "foldBottomLeft") ?
+                            Math.ceil(slider._height/slider.options.verticalBlocks)*j + "px":
+                            "auto",
+                        "bottom": (effect == "foldBottomRight"||effect == "foldBottomLeft") ?
+                            "auto":
+                            Math.ceil(slider._height/slider.options.verticalBlocks)*j + "px",
+                        "width": Math.ceil(slider._width/slider.options.horizontalBlocks) + "px",
+                        "height": Math.ceil(slider._height/slider.options.verticalBlocks) + "px",
+                        "position": "absolute",
+                        "z-index": 2,
+                        "overflow": "hidden"
+                    });
+                    (function($parent, i, j){
+                        setTimeout(function() {
+                            $parent.animate({
+                                "width": 0,
+                                "height": 0
+                            }, {
+                                "duration": (i+j)/(slider.options.horizontalBlocks+slider.options.verticalBlocks)*slider.options.duration,
+                                "easing": "linear",
+                                "complete": function() {
+                                    $(this).remove();
+                                }
+                            });
+                        }, (i)/2/(slider.options.horizontalBlocks+slider.options.verticalBlocks)*slider.options.duration);
+                    }($parent, i, j));
+                }
+            }
+            //show next slide, hide previous
+            $nextSlide.css("left", 0);
+            hideSlides($currentSlide);
+        }
         
 
 
