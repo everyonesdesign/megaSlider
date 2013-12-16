@@ -737,7 +737,7 @@
 
         //general slice effects function
         function sliceEffects(effect, crossSlice) {
-            var $currentSlide = $slides.eq(currentSlide),
+            var $currentSlide = $slides.eq(currentSlide).css("z-index", 1),
                 $nextSlide = $slides.eq(nextSlide),
                 blocksNumber,
                 blockMetrics;
@@ -749,13 +749,16 @@
                 blockMetrics = Math.ceil(slider._height/blocksNumber);
             }
 
+            var $toRemove = $();
+
             //creating blocks for slice
             for (var i=0; i<blocksNumber; i++) {
 
                 //creating clone of current slide, insert it and set its width to be equal with original one
-                var $clone = $currentSlide.clone()
+                var $clone = $nextSlide.clone()
                         .appendTo($slidesWrap)
                         .wrap("<div></div>"),
+                        crossMult = (i%2==1 && crossSlice) ? -1 : 1;
 
                 //added wrap to a variable
                     $parent = $clone.parent();
@@ -780,39 +783,42 @@
                     "left": (effect == "sliceRight") ?
                         i*blockMetrics + "px" :
                         (effect == "sliceLeft") ?
-                            "" : 0,
+                            "" : -slider._width*crossMult,
                     "right": (effect == "sliceLeft") ? i*blockMetrics + "px" : "auto",
                     "top": (effect == "sliceBottom") ?
                         i*blockMetrics + "px" :
                         (effect == "sliceTop") ?
-                            "" : "auto",
+                            "" : -slider._height*crossMult,
                     "bottom": (effect == "sliceTop") ? i*blockMetrics + "px" : "auto",
                     "width": (effect == "sliceRight"||effect == "sliceLeft") ? Math.ceil(slider._width/blocksNumber) + "px" : "100%",
                     "height": (effect == "sliceBottom"||effect == "sliceTop") ? Math.ceil(slider._height/blocksNumber) + "px" : "100%"
-                });
-                (function($parent, i, effect, crossSlice){
-                    var crossMult = (i%2==1 && crossSlice) ? -1 : 1,
-                        blocksNumber = (effect == "sliceRight"||effect == "sliceLeft") ?
+                }).animate({"opacity": 0}, 0); //cross-browser hide parent
+                $toRemove = $toRemove.add($parent);
+                (function($parent, i, effect){
+                        var blocksNumber = (effect == "sliceRight"||effect == "sliceLeft") ?
                             slider.options.horizontalBlocks :
-                            slider.options.verticalBlocks;
+                            slider.options.verticalBlocks,
+                            durationCoef = 1/4; // means that last 1/4 of transition time is time when all the blocks are animated already
                     setTimeout(function() {
                         $parent.animate({
-                            "left": (effect == "sliceTop"||effect == "sliceBottom") ? -slider._width*crossMult : $parent.css("left"),
-                            "top": (effect == "sliceLeft"||effect == "sliceRight") ? -slider._height*crossMult : $parent.css("top")
+                            "left": (effect == "sliceTop"||effect == "sliceBottom") ? 0 : $parent.css("left"),
+                            "top": (effect == "sliceLeft"||effect == "sliceRight") ? 0 : $parent.css("top"),
+                            opacity: 1
                         }, {
-                            "duration": 1/blocksNumber*slider.options.duration,
-                            "easing": "linear",
-                            "complete": function() {
-                                $(this).remove();
-                            }
+                            "duration": slider.options.duration*durationCoef,
+                            "easing": "linear"
                         });
-                    }, i/1.1/blocksNumber*slider.options.duration);
-                }($parent, i, effect, crossSlice));
+                    }, i*(1 - durationCoef)/blocksNumber*slider.options.duration);
+                }($parent, i, effect));
             }
 
             //show next slide, hide previous
             $nextSlide.css("left", 0);
-            hideSlides($currentSlide);
+            setTimeout(function() {
+                $toRemove.remove();
+                $currentSlide.css("z-index", "");
+                hideSlides($currentSlide);
+            }, slider.options.duration);
         }
 
 
