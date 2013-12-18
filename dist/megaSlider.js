@@ -1,5 +1,4 @@
 //TODO add effects, pagination, previews, autoheight
-//TODO rewrite gotonextslide effects arguments work
 //TODO check ie7,8 opacity compatibility
 ;
 (function($) {
@@ -117,17 +116,20 @@
             slider.options.onSliderLoad();
         }
 
-        function generateEffectName() {
+        function generateEffectName(effectArgument) {
             var effectName,
                 effectsArray = [],
                 effectsMax,
-                randomEffectNumber;
-            if (slider.options.effects === "all") {
+                randomEffectNumber,
+                effectToParse;
+            if (typeof(effectArgument) == "string") effectToParse = effectArgument;
+                else {effectToParse = slider.options.effects}
+            if (effectToParse === "all") {
                 $.each(slider.effects, function(index) {
                     effectsArray.push(index);
                 });
             } else {
-                effectsArray = slider.options.effects.split(",");
+                effectsArray = effectToParse.split(",");
             }
             effectsMax = effectsArray.length-1;
             randomEffectNumber = Math.floor(Math.random() * (effectsMax + 1));
@@ -140,13 +142,15 @@
             if (isSliderAnimated) return; //if transition in process
             slider.options.beforeSlide(nextSlide); //callback
             isSliderAnimated = true; //show that slider is animated then
-            var effect = generateEffectName(), //get effect from list
+            var effectString = null,
+                effect, //get effect from list
                 dataAttributeEffect = $slides.eq(nextSlide).data("effect");
-            if (dataAttributeEffect) effect = dataAttributeEffect; //if attribute effect is set, use it
-            if (typeof(customEffect) == "string") effect = customEffect; //if argument effect is set, use it (NOTE: it has highest priority)
+            if (dataAttributeEffect) effectString = dataAttributeEffect; //if attribute effect is set, use it
+            if (typeof(customEffect) == "string") effectString = customEffect; //if argument effect is set, use it (NOTE: it has highest priority)
+            effect = generateEffectName(effectString);
             if (typeof(slider.effects[effect]) === "function") slider.effects[effect](); //if effect if defined execute it
             else console.error("The specified effect \"" + effect + "\" is missing"); //else error
-            setTimeout(function() { //execute after trantition ends
+            setTimeout(function() { //execute after transition ends
                 isSliderAnimated = false;
                 setNewSlidesNumbers();
                 slider.options.afterSlide(nextSlide); //callback
