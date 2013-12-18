@@ -109,6 +109,10 @@
                 initSliderControls();
             }
 
+            if (slider.modules.pagination&&slider.options.pagination) {
+                initSliderPagination();
+            }
+
             //start auto
             if (slider.options.auto) startAuto();
             if (slider.options.stopAutoOnHover) $slider.hover(stopAuto, startAuto);
@@ -280,14 +284,22 @@
 
 
 
+        function initSliderPagination() {
+            var $container = $("<div class='megaSlider-pagination'></div>").appendTo($slider),
+                itemProto = "<a href='javascript:;' class='megaSlider-paginationItem'></a>";
+            for (var i=0; i<$slides.length; i++) {
+                $(itemProto).clone().text(i+1).click(function() {goToSlide(i)}).appendTo($container);
+            }
+        }
+
         function initSliderControls() {
-            var container = "<div class='megaSlider-controls'></div>",
+            var $container = $("<div class='megaSlider-controls'></div>").appendTo($slider),
                 arrow = "<a href='javascript:;' class='megaSlider-control'></a>",
                 $prev,
                 $next;
             $prev = $(arrow).clone().addClass("prev").text(slider.options.prevText).click(goToNextSlide);
             $next = $(arrow).clone().addClass("next").text(slider.options.nextText).click(goToPrevSlide);
-            $(container).append($prev).append($next).appendTo($slider);
+            $container.append($prev).append($next);
         }
 
 
