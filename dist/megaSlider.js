@@ -49,10 +49,12 @@
             currentSlide,
             nextSlide;
 
-        slider.modules = {}; //all the connected additional modules (except for effects) are in this object
-        slider.modules.controls = true;
-        slider.modules.auto = true;
-
+        slider.modules = {
+            pagination: true,
+            controls: true,
+            auto: true,
+            responsive: true
+        }; //all the connected additional modules (except for effects) are in this object
 
 
         //write options in slider object to be able to read/change them later
@@ -265,7 +267,6 @@
             $slide.css({"top": 0, "left": "-9999px", "z-index": ""});
         }
 
-        slider.modules.responsive = true;
 
         //responsive slider version
         makeSliderResponsive();
